@@ -1,7 +1,7 @@
 {
-  "version": "1.1",
-  "generated_at": "2026-06-15T06:17:26.776622",
-  "updated_at": "2026-06-15T06:20:00.000000",
+  "version": "1.2",
+  "generated_at": "2026-06-15T07:12:55.197606",
+  "updated_at": "2026-06-15T07:12:55.197606",
   "entries": [
     {
       "filename": "20240115_张三_采访_04.wav",
@@ -13,7 +13,9 @@
       "detected_topic": "采访",
       "confirmed_topic": "AI产品发布会",
       "status": "confirmed",
-      "missing_fields": ["topic"]
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240115_张三_采访_05.txt",
@@ -25,7 +27,65 @@
       "detected_topic": "采访",
       "confirmed_topic": "AI产品发布会",
       "status": "confirmed",
-      "missing_fields": ["topic"]
+      "missing_fields": [
+        "topic"
+      ]
+    },
+    {
+      "filename": "20240220_王五_采访_03.wav",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
+      "detected_interviewee": "王五",
+      "confirmed_interviewee": null,
+      "detected_date": "2024-02-20T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
+    },
+    {
+      "filename": "20240315_周八_采访_07.wav",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
+      "detected_interviewee": "周八",
+      "confirmed_interviewee": null,
+      "detected_date": "2024-03-15T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
+    },
+    {
+      "filename": "20240410_孙九_采访_06.wav",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\20240410_孙九_采访_06.wav",
+      "detected_interviewee": "孙九",
+      "confirmed_interviewee": null,
+      "detected_date": "2024-04-10T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
+    },
+    {
+      "filename": "20240520_钱十_采访_08.wav",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\20240520_钱十_采访_08.wav",
+      "detected_interviewee": "钱十",
+      "confirmed_interviewee": null,
+      "detected_date": "2024-05-20T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240601_李四_采访_10.txt",
@@ -35,9 +95,11 @@
       "detected_date": "2024-06-01T00:00:00",
       "confirmed_date": null,
       "detected_topic": "采访",
-      "confirmed_topic": "创业分享",
-      "status": "confirmed",
-      "missing_fields": ["topic"]
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240601_李四_采访_11.wav",
@@ -47,9 +109,11 @@
       "detected_date": "2024-06-01T00:00:00",
       "confirmed_date": null,
       "detected_topic": "采访",
-      "confirmed_topic": "创业分享",
-      "status": "confirmed",
-      "missing_fields": ["topic"]
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240601_李四_采访_12.txt",
@@ -59,9 +123,11 @@
       "detected_date": "2024-06-01T00:00:00",
       "confirmed_date": null,
       "detected_topic": "采访",
-      "confirmed_topic": "创业分享",
-      "status": "confirmed",
-      "missing_fields": ["topic"]
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240601_李四_采访_13.wav",
@@ -71,9 +137,11 @@
       "detected_date": "2024-06-01T00:00:00",
       "confirmed_date": null,
       "detected_topic": "采访",
-      "confirmed_topic": "创业分享",
-      "status": "confirmed",
-      "missing_fields": ["topic"]
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240601_李四_采访_14.txt",
@@ -83,9 +151,11 @@
       "detected_date": "2024-06-01T00:00:00",
       "confirmed_date": null,
       "detected_topic": "采访",
-      "confirmed_topic": "创业分享",
-      "status": "confirmed",
-      "missing_fields": ["topic"]
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "20240601_李四_采访_15.wav",
@@ -95,9 +165,25 @@
       "detected_date": "2024-06-01T00:00:00",
       "confirmed_date": null,
       "detected_topic": "采访",
-      "confirmed_topic": "创业分享",
-      "status": "confirmed",
-      "missing_fields": ["topic"]
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
+    },
+    {
+      "filename": "20240701_赵六_采访_18.txt",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\20240701_赵六_采访_18.txt",
+      "detected_interviewee": "赵六",
+      "confirmed_interviewee": null,
+      "detected_date": "2024-07-01T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     },
     {
       "filename": "未知日期_未知受访者_采访_09.txt",
@@ -109,7 +195,71 @@
       "detected_topic": "采访",
       "confirmed_topic": "行业洞察",
       "status": "confirmed",
-      "missing_fields": ["interviewee", "date", "topic"]
+      "missing_fields": [
+        "interviewee",
+        "date",
+        "topic"
+      ]
+    },
+    {
+      "filename": "未知日期_未知受访者_采访_19.txt",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
+      "detected_interviewee": null,
+      "confirmed_interviewee": null,
+      "detected_date": null,
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "interviewee",
+        "date",
+        "topic"
+      ]
+    },
+    {
+      "filename": "未知日期_未知受访者_采访_20.txt",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
+      "detected_interviewee": null,
+      "confirmed_interviewee": null,
+      "detected_date": null,
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "interviewee",
+        "date",
+        "topic"
+      ]
+    },
+    {
+      "filename": "20231201_陈七_采访_01.txt",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
+      "detected_interviewee": "陈七",
+      "confirmed_interviewee": null,
+      "detected_date": "2023-12-01T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
+    },
+    {
+      "filename": "20231201_陈七_采访_02.wav",
+      "filepath": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
+      "detected_interviewee": "陈七",
+      "confirmed_interviewee": null,
+      "detected_date": "2023-12-01T00:00:00",
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending",
+      "missing_fields": [
+        "topic"
+      ]
     }
   ]
 }

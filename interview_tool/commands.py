@@ -472,6 +472,7 @@ def cmd_report(args):
     recursive = not args.no_recursive
     daily = args.daily
     weekly = args.weekly
+    followup = args.followup
     export_confirm = args.export_confirm
     import_confirm = args.import_confirm
 
@@ -536,7 +537,8 @@ def cmd_report(args):
         output_path=output,
         format=format_type,
         daily=daily,
-        weekly=weekly
+        weekly=weekly,
+        followup=followup
     )
 
     print(report_content)

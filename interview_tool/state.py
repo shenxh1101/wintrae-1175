@@ -190,6 +190,8 @@ class StateManager:
         self._state['interviews'][key]['merged'] = True
         self._state['interviews'][key]['merged_output'] = output_path
         self._state['interviews'][key]['topic'] = topic or self._state['interviews'][key].get('topic')
+        self._state['interviews'][key]['has_audio'] = True
+        self._state['interviews'][key]['has_text'] = True
         
         self._save()
         self.log_daily_merge(group_name, output_path, len(source_files) if isinstance(source_files, list) else 0)
@@ -321,20 +323,20 @@ class StateManager:
             'confirmed_files': [],
         })
 
-    def get_dashboard(self, scan_result=None):
-        """
-        生成项目看板数据
-        
-        包含: 配对完成率、待确认素材数、已合并但缺件分组数、各步骤状态
-        """
+    def get_dashboard(self, scan_result=None, confirmation_manager=None):
         rename_summary = self.get_rename_summary()
         merge_summary = self.get_merge_summary()
         interviews = self._state.get('interviews', {})
         daily_log = self.get_daily_log()
 
+        merged_keys = set()
+        for k, v in interviews.items():
+            if v.get('merged'):
+                merged_keys.add(k)
+
         total_groups = len(interviews) if interviews else 1
         complete_groups = sum(
-            1 for v in interviews.values()
+            1 for k, v in interviews.items()
             if v.get('has_audio') and v.get('has_text')
         ) if interviews else 0
         pairing_rate = (complete_groups / total_groups * 100) if total_groups > 0 else 0
@@ -348,11 +350,15 @@ class StateManager:
                     'missing': '缺文字稿' if not info.get('has_text') else '缺录音',
                 })
 
+        unconfirmed_count = 0
+        if confirmation_manager:
+            unconfirmed_count = confirmation_manager.get_pending_count()
+
         return {
             'pairing_rate': f"{pairing_rate:.1f}%",
             'complete_groups': complete_groups,
             'total_groups': total_groups,
-            'unconfirmed_count': 0,
+            'unconfirmed_count': unconfirmed_count,
             'merged_but_incomplete': merged_but_incomplete,
             'merged_but_incomplete_count': len(merged_but_incomplete),
             'rename_completed': rename_summary.get('已完成', False),
@@ -436,6 +442,8 @@ class StateManager:
 
         newly_complete = []
         stuck_groups = []
+        group_timelines = {}
+
         if week_snapshots:
             first_day = min(week_snapshots.keys())
             last_day = max(week_snapshots.keys())
@@ -484,6 +492,68 @@ class StateManager:
                         'unconfirmed': data['info'].get('unconfirmed', False),
                     })
 
+            all_keys = set()
+            for snap in week_snapshots.values():
+                all_keys.update(snap.keys())
+
+            for key in all_keys:
+                timeline = []
+                prev_status = None
+                for d in sorted(week_snapshots.keys()):
+                    info = week_snapshots[d].get(key)
+                    if info is None:
+                        continue
+                    is_complete = info.get('is_complete', False)
+                    has_audio = info.get('has_audio', False)
+                    has_text = info.get('has_text', False)
+                    unconfirmed = info.get('unconfirmed', False)
+
+                    if is_complete and not unconfirmed:
+                        status = 'complete'
+                    elif unconfirmed:
+                        status = 'unconfirmed'
+                    elif has_audio and not has_text:
+                        status = 'missing_text'
+                    elif has_text and not has_audio:
+                        status = 'missing_audio'
+                    else:
+                        status = 'incomplete'
+
+                    day_events = []
+                    day_log = daily_log.get(d, {})
+                    for rf in day_log.get('renamed_files', []):
+                        old_name = os.path.basename(rf.get('old_path', ''))
+                        if key in old_name or info and (info.get('interviewee') in old_name or info.get('topic', '采访') in old_name):
+                            day_events.append(f"rename: {old_name}")
+                    for mg in day_log.get('merged_groups', []):
+                        if mg.get('group_name') == key or (info and (info.get('interviewee') == mg.get('group_name') or info.get('topic', '采访') == mg.get('group_name'))):
+                            day_events.append(f"merge: {mg.get('group_name')} ({mg.get('file_count', 0)} files)")
+                    for cf in day_log.get('confirmed_files', []):
+                        if info:
+                            interviewee_match = info.get('interviewee') and info.get('interviewee') in cf.get('filename', '')
+                            topic_match = info.get('topic', '采访') != '采访' and info.get('topic') in cf.get('filename', '')
+                            if interviewee_match or topic_match:
+                                field_cn = {'interviewee': '受访者', 'date': '日期', 'topic': '主题'}.get(cf.get('field', ''), cf.get('field', ''))
+                                day_events.append(f"confirm: {field_cn} -> {cf.get('value', '')}")
+
+                    entry = {
+                        'date': d,
+                        'status': status,
+                        'changed': status != prev_status if prev_status is not None else True,
+                        'events': day_events,
+                    }
+                    timeline.append(entry)
+                    prev_status = status
+
+                if timeline:
+                    first_info = timeline[0]
+                    snap_for_name = week_snapshots.get(sorted(week_snapshots.keys())[0], {}).get(key, {})
+                    group_timelines[key] = {
+                        'interviewee': snap_for_name.get('interviewee', '未知') if snap_for_name else '未知',
+                        'topic': snap_for_name.get('topic', '采访') if snap_for_name else '采访',
+                        'timeline': timeline,
+                    }
+
         unconfirmed_count = 0
         if confirmation_manager:
             unconfirmed_count = confirmation_manager.get_pending_count()
@@ -503,4 +573,5 @@ class StateManager:
             'stuck_groups': stuck_groups,
             'stuck_count': len(stuck_groups),
             'unconfirmed_count': unconfirmed_count,
+            'group_timelines': group_timelines,
         }

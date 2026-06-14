@@ -317,6 +317,16 @@ def _group_has_confirmed_interviewee(group_name, group_files, confirmation_manag
     return False
 
 
+def _is_group_already_merged(group_name, group_files, state_manager):
+    if state_manager is None:
+        return False
+    merged_groups = state_manager._state.get('merge', {}).get('merged_groups', [])
+    for mg in merged_groups:
+        if mg.get('group_name') == group_name:
+            return True
+    return False
+
+
 def preview_merge(filepaths, output_dir, group_by='interviewee', state_manager=None, confirmation_manager=None):
     filepaths = _filter_out_merged_files(filepaths, state_manager)
 
@@ -325,6 +335,8 @@ def preview_merge(filepaths, output_dir, group_by='interviewee', state_manager=N
     preview_results = []
 
     for group_name, group_files in groups.items():
+        if _is_group_already_merged(group_name, group_files, state_manager):
+            continue
         sample_file = group_files[0]
         sample_name = os.path.basename(sample_file)
         interviewee = extract_interviewee_from_filename(sample_name)
@@ -431,6 +443,10 @@ def merge_by_group(filepaths, output_dir, group_by='interviewee', state_manager=
     results = []
 
     for group_name, group_files in groups.items():
+        if _is_group_already_merged(group_name, group_files, state_manager):
+            if state_manager:
+                state_manager.add_skipped_group(group_name, "该分组已合并，跳过")
+            continue
         if len(group_files) < 2:
             if state_manager:
                 state_manager.add_skipped_group(group_name, "文件数少于2，跳过合并")

@@ -218,8 +218,17 @@ class ReportGenerator:
         confirmed_files = daily_log.get('confirmed_files', [])
 
         groups = self.get_interview_groups(result)
+        merged_keys = set()
+        if self.state_manager:
+            interviews = self.state_manager._state.get('interviews', {})
+            for k, v in interviews.items():
+                if v.get('merged'):
+                    merged_keys.add(k)
+
         missing_groups = []
         for key, group in groups.items():
+            if key in merged_keys:
+                continue
             if not group.is_complete:
                 missing_parts = []
                 if not group.has_text:
@@ -235,6 +244,12 @@ class ReportGenerator:
 
         unconfirmed_list = self.generate_unconfirmed_list(result)
 
+        unconfirmed_count = 0
+        if self.confirmation_manager:
+            unconfirmed_count = self.confirmation_manager.get_pending_count()
+        else:
+            unconfirmed_count = len(unconfirmed_list)
+
         return {
             'date': today_str,
             'renamed_files': renamed_files,
@@ -246,7 +261,7 @@ class ReportGenerator:
             'missing_groups': missing_groups,
             'missing_count': len(missing_groups),
             'unconfirmed_list': unconfirmed_list,
-            'unconfirmed_count': len(unconfirmed_list),
+            'unconfirmed_count': unconfirmed_count,
         }
 
     def generate_weekly_report(self, scan_result=None, week_key=None):
@@ -277,8 +292,17 @@ class ReportGenerator:
             )
 
         groups = self.get_interview_groups(result)
+        merged_keys = set()
+        if self.state_manager:
+            interviews = self.state_manager._state.get('interviews', {})
+            for k, v in interviews.items():
+                if v.get('merged'):
+                    merged_keys.add(k)
+
         missing_groups = []
         for key, group in groups.items():
+            if key in merged_keys:
+                continue
             if not group.is_complete:
                 missing_parts = []
                 if not group.has_text:
@@ -648,7 +672,137 @@ class ReportGenerator:
 
         return details
 
-    def generate_full_report(self, scan_result=None, output_path=None, format='text', daily=False, weekly=False):
+    def generate_followup_view(self, scan_result=None):
+        result = scan_result or self.scan_result
+        if result is None:
+            raise ValueError("未提供扫描结果")
+
+        groups = self.get_interview_groups(result)
+        followup_items = []
+
+        for key, group in sorted(groups.items()):
+            last_action = None
+            last_action_time = None
+            current_blocker = None
+            next_step = None
+
+            if self.state_manager:
+                interviews = self.state_manager._state.get('interviews', {})
+                state_info = interviews.get(key, {})
+
+                if state_info.get('merged'):
+                    last_action = '已合并'
+                    merged_groups = self.state_manager._state.get('merge', {}).get('merged_groups', [])
+                    for mg in merged_groups:
+                        if mg.get('group_name') == group.interviewee or mg.get('group_name') == group.topic:
+                            last_action = f"已合并 ({os.path.basename(mg.get('output_path', ''))})"
+                            last_action_time = mg.get('merged_at')
+                            break
+                elif state_info.get('renamed'):
+                    last_action = '已重命名'
+                    renamed_files = self.state_manager._state.get('rename', {}).get('renamed_files', [])
+                    for rf in renamed_files:
+                        new_name = os.path.basename(rf.get('new_path', ''))
+                        if group.interviewee and group.interviewee in new_name:
+                            last_action = f"已重命名 ({new_name})"
+                            last_action_time = rf.get('renamed_at')
+                            break
+
+            daily_log = self.state_manager._state.get('daily_log', {}) if self.state_manager else {}
+            if not last_action_time:
+                for d in sorted(daily_log.keys(), reverse=True):
+                    day_log = daily_log[d]
+                    for cf in day_log.get('confirmed_files', []):
+                        fn = cf.get('filename', '')
+                        if group.interviewee and group.interviewee in fn:
+                            field_cn = {'interviewee': '受访者', 'date': '日期', 'topic': '主题'}.get(cf.get('field', ''), cf.get('field', ''))
+                            last_action = f"补录 {field_cn}: {cf.get('value', '')}"
+                            last_action_time = cf.get('timestamp')
+                            break
+                    if last_action:
+                        break
+
+            if not last_action:
+                last_action = '新发现'
+                last_action_time = None
+
+            unconfirmed_fields = []
+            if self.confirmation_manager:
+                for f in group.audio_files + group.text_files:
+                    ci = self.confirmation_manager.get_confirmed_info(f.filename)
+                    if ci is None:
+                        topic = f.topic if hasattr(f, 'topic') else extract_topic_from_filename(f.filename)
+                        if f.interviewee is None or f.interviewee == '未知受访者':
+                            if 'interviewee' not in unconfirmed_fields:
+                                unconfirmed_fields.append('interviewee')
+                        if f.date is None:
+                            if 'date' not in unconfirmed_fields:
+                                unconfirmed_fields.append('date')
+                        if topic == '采访':
+                            if 'topic' not in unconfirmed_fields:
+                                unconfirmed_fields.append('topic')
+
+            missing_parts = []
+            if not group.has_text:
+                missing_parts.append('文字稿')
+            if not group.has_audio:
+                missing_parts.append('音频')
+
+            if unconfirmed_fields:
+                field_cn_map = {'interviewee': '受访者', 'date': '日期', 'topic': '主题'}
+                blocker_parts = [f"{field_cn_map.get(f, f)}待确认" for f in unconfirmed_fields]
+                current_blocker = '、'.join(blocker_parts)
+                if 'interviewee' in unconfirmed_fields:
+                    next_step = "补录受访者信息 (report --export-confirm)"
+                elif 'date' in unconfirmed_fields:
+                    next_step = "补录采访日期 (report --export-confirm)"
+                elif 'topic' in unconfirmed_fields:
+                    next_step = "补录采访主题 (report --export-confirm)"
+            elif missing_parts:
+                current_blocker = f"缺{'、'.join(missing_parts)}"
+                if '文字稿' in missing_parts:
+                    next_step = "补充文字稿后重新 scan"
+                else:
+                    next_step = "补充音频后重新 scan"
+            elif not group.is_complete:
+                current_blocker = "不完整"
+                next_step = "检查素材文件"
+            else:
+                if self.state_manager:
+                    interviews = self.state_manager._state.get('interviews', {})
+                    state_info = interviews.get(key, {})
+                    if not state_info.get('renamed'):
+                        current_blocker = None
+                        next_step = "执行 rename 规范化命名"
+                    elif not state_info.get('merged') and len(group.text_files) > 1:
+                        current_blocker = None
+                        next_step = "执行 merge 合并文字稿"
+                    else:
+                        current_blocker = None
+                        next_step = "已完成，无需操作"
+                else:
+                    current_blocker = None
+                    next_step = "检查整理进度"
+
+            followup_items.append({
+                'group_key': key,
+                'interviewee': group.interviewee or '未知',
+                'date': group.date.strftime('%Y-%m-%d') if group.date else '未知',
+                'topic': group.topic or '采访',
+                'is_complete': group.is_complete,
+                'has_audio': group.has_audio,
+                'has_text': group.has_text,
+                'last_action': last_action,
+                'last_action_time': last_action_time,
+                'current_blocker': current_blocker,
+                'next_step': next_step,
+                'unconfirmed_fields': unconfirmed_fields,
+                'missing_parts': missing_parts,
+            })
+
+        return followup_items
+
+    def generate_full_report(self, scan_result=None, output_path=None, format='text', daily=False, weekly=False, followup=False):
         result = scan_result or self.scan_result
         if result is None:
             raise ValueError("未提供扫描结果")
@@ -683,10 +837,14 @@ class ReportGenerator:
             weekly_report = self.generate_weekly_report(result)
             report_data['weekly_report'] = weekly_report
 
+        if followup:
+            followup_view = self.generate_followup_view(result)
+            report_data['followup_view'] = followup_view
+
         if format == 'json':
             report_content = json.dumps(report_data, ensure_ascii=False, indent=2)
         else:
-            report_content = self._format_text_report(report_data, daily=daily, weekly=weekly)
+            report_content = self._format_text_report(report_data, daily=daily, weekly=weekly, followup=followup)
 
         if output_path:
             output_dir = os.path.dirname(output_path)
@@ -698,7 +856,7 @@ class ReportGenerator:
 
         return report_content
 
-    def _format_text_report(self, data, daily=False, weekly=False):
+    def _format_text_report(self, data, daily=False, weekly=False, followup=False):
         lines = []
         lines.append("=" * 70)
         lines.append("采访素材整理报告")
@@ -811,8 +969,9 @@ class ReportGenerator:
         lines.append("")
 
         unconfirmed_list = data.get('unconfirmed_list', [])
+        unconfirmed_display_count = dashboard.get('unconfirmed_count', len(unconfirmed_list))
         lines.append("【待确认素材】")
-        lines.append(f"  共 {len(unconfirmed_list)} 件待确认")
+        lines.append(f"  共 {unconfirmed_display_count} 件待确认")
         for item in unconfirmed_list[:10]:
             filename = item.get('filename', '')
             interviewee = item.get('interviewee') or '(未识别)'
@@ -950,6 +1109,89 @@ class ReportGenerator:
 
             lines.append(f"  当前待确认素材: {wr.get('unconfirmed_count', 0)} 件")
             lines.append("")
+
+            group_timelines = wr.get('group_timelines', {})
+            if group_timelines:
+                lines.append("  【采访状态变化时间线】")
+                status_cn = {
+                    'complete': '完整',
+                    'unconfirmed': '待确认',
+                    'missing_text': '缺文字稿',
+                    'missing_audio': '缺音频',
+                    'incomplete': '不完整',
+                }
+                for key, tl_data in sorted(group_timelines.items()):
+                    interviewee = tl_data.get('interviewee', '未知')
+                    if not interviewee or interviewee == 'None':
+                        interviewee = '未知'
+                    topic = tl_data.get('topic', '采访')
+                    timeline = tl_data.get('timeline', [])
+
+                    display_name = interviewee
+                    if topic and topic != '采访':
+                        display_name = f"{interviewee}({topic})"
+
+                    changed_entries = [t for t in timeline if t.get('changed')]
+                    if not changed_entries:
+                        continue
+
+                    lines.append(f"    {display_name}:")
+                    for t in changed_entries:
+                        date_str = t['date'][5:] if len(t['date']) > 5 else t['date']
+                        status_str = status_cn.get(t['status'], t['status'])
+                        line_str = f"      {date_str} -> {status_str}"
+                        if t.get('events'):
+                            events_str = "; ".join(t['events'])
+                            line_str += f"  [{events_str}]"
+                        lines.append(line_str)
+                lines.append("")
+
+        if followup and 'followup_view' in data:
+            fu_items = data['followup_view']
+            lines.append("【采访跟进视图】")
+            lines.append(f"  共 {len(fu_items)} 个采访分组")
+            lines.append("")
+
+            blocked = [i for i in fu_items if i.get('current_blocker')]
+            ready = [i for i in fu_items if not i.get('current_blocker') and i.get('next_step') != '已完成，无需操作']
+            done = [i for i in fu_items if i.get('next_step') == '已完成，无需操作']
+
+            if blocked:
+                lines.append(f"  >> 当前卡点 ({len(blocked)} 组)")
+                for item in blocked:
+                    interviewee = item.get('interviewee', '未知')
+                    topic = item.get('topic', '采访')
+                    display = f"{interviewee}" if topic == '采访' else f"{interviewee}({topic})"
+                    date = item.get('date', '未知')
+                    blocker = item.get('current_blocker', '')
+                    next_step = item.get('next_step', '')
+                    lines.append(f"    ! {display} | {date}")
+                    lines.append(f"      卡点: {blocker}")
+                    lines.append(f"      下一步: {next_step}")
+                lines.append("")
+
+            if ready:
+                lines.append(f"  >> 可推进 ({len(ready)} 组)")
+                for item in ready:
+                    interviewee = item.get('interviewee', '未知')
+                    topic = item.get('topic', '采访')
+                    display = f"{interviewee}" if topic == '采访' else f"{interviewee}({topic})"
+                    date = item.get('date', '未知')
+                    last_action = item.get('last_action', '')
+                    next_step = item.get('next_step', '')
+                    lines.append(f"    > {display} | {date} | 上次: {last_action}")
+                    lines.append(f"      下一步: {next_step}")
+                lines.append("")
+
+            if done:
+                lines.append(f"  >> 已完成 ({len(done)} 组)")
+                for item in done:
+                    interviewee = item.get('interviewee', '未知')
+                    topic = item.get('topic', '采访')
+                    display = f"{interviewee}" if topic == '采访' else f"{interviewee}({topic})"
+                    date = item.get('date', '未知')
+                    lines.append(f"    OK {display} | {date}")
+                lines.append("")
 
         lines.append("【问题清单】")
         errors = data['问题清单']

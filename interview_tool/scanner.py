@@ -14,11 +14,22 @@ from .audio import get_audio_duration
 
 TOOL_GENERATED_FILES = {
     'interview_state.json', '待确认清单.json', '待确认清单_可读版.txt',
+    'full_report.txt', '待确认清单_已编辑.json',
 }
 
 MERGED_FILE_PATTERNS = ['_合并稿.txt', '_合并.txt']
 
 def _is_merged_output(filename):
+    for pattern in MERGED_FILE_PATTERNS:
+        if filename.endswith(pattern):
+            return True
+    return False
+
+def _is_tool_generated(filename):
+    if filename in TOOL_GENERATED_FILES:
+        return True
+    if filename.endswith('.bak'):
+        return True
     for pattern in MERGED_FILE_PATTERNS:
         if filename.endswith(pattern):
             return True
@@ -122,9 +133,7 @@ def scan_directory(directory, recursive=True, compute_hash=True):
             result.directories.add(root)
             for filename in files:
                 filepath = os.path.join(root, filename)
-                if filename in TOOL_GENERATED_FILES:
-                    continue
-                if _is_merged_output(filename):
+                if _is_tool_generated(filename):
                     continue
                 if is_media_related(filepath):
                     file_info = FileInfo(filepath)
@@ -148,9 +157,7 @@ def scan_directory(directory, recursive=True, compute_hash=True):
         result.directories.add(directory)
         for item in os.listdir(directory):
             filepath = os.path.join(directory, item)
-            if item in TOOL_GENERATED_FILES:
-                continue
-            if _is_merged_output(item):
+            if _is_tool_generated(item):
                 continue
             if os.path.isfile(filepath) and is_media_related(filepath):
                 file_info = FileInfo(filepath)

@@ -48,6 +48,8 @@ def create_parser():
   interview-tool report ./素材 --daily
   # 生成周报
   interview-tool report ./素材 --weekly
+  # 生成跟进视图
+  interview-tool report ./素材 --followup
         """
     )
 
@@ -350,6 +352,12 @@ def _add_report_parser(subparsers):
         '--weekly',
         action='store_true',
         help='生成周报模式，包含本周处理汇总、卡壳分组等'
+    )
+
+    report_parser.add_argument(
+        '--followup',
+        action='store_true',
+        help='生成跟进视图，按采访分组展示当前卡点、最近动作、下一步建议'
     )
 
     report_parser.add_argument(
