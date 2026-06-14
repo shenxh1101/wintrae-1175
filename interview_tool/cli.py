@@ -15,15 +15,30 @@ def create_parser():
         description='采访素材整理工具 - 批量整理采访录音和文字稿',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
+工作流程:
+  1. scan   查看素材概况
+  2. rename 先 --export-plan 导出清单确认，再 --from-plan 执行
+  3. merge  按受访者/日期/主题分组合并，生成采访提要
+  4. report 查看整理进度和缺失项
+
 示例:
   interview-tool scan ./素材目录
   interview-tool scan ./素材目录 --detail
-  interview-tool rename ./素材目录 --date 2024-01-15 --interviewee 张三
+  
+  # 重命名流程
+  interview-tool rename ./素材目录 --export-plan rename_plan.json
+  interview-tool rename ./素材目录 --from-plan rename_plan.json
+  interview-tool rename ./素材目录 --date 2024-01-15 --interviewee 张三 --group-by interviewee
   interview-tool rename ./素材目录 --pattern "{date}_{interviewee}_采访_{index}" --dry-run
-  interview-tool merge ./素材目录 --output 合并稿.txt
+  
+  # 合并流程
   interview-tool merge ./素材目录 --group-by interviewee
-  interview-tool report ./素材目录 --output 报告.txt
-  interview-tool report ./素材目录 --format json --output 报告.json
+  interview-tool merge ./素材目录 --group-by topic
+  interview-tool merge ./素材目录 --output 合并稿.txt
+  
+  # 报告
+  interview-tool report ./素材目录
+  interview-tool report ./素材目录 --output 报告.txt --format json
         """
     )
     
@@ -88,7 +103,20 @@ def _add_rename_parser(subparsers):
     rename_parser = subparsers.add_parser(
         'rename',
         help='按规则批量重命名文件',
-        description='按规则批量重命名采访文件，支持日期补全、受访者标签、分组序号'
+        description='按规则批量重命名采访文件，支持清单导出/导入、日期补全、受访者标签、分组序号',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+示例:
+  # 1. 导出重命名清单供团队确认
+  interview-tool rename ./素材 --export-plan plan.json
+  
+  # 2. 根据确认后的清单执行
+  interview-tool rename ./素材 --from-plan plan.json
+  
+  # 3. 直接指定规则执行
+  interview-tool rename ./素材 --date 2024-01-15 --interviewee 张三
+  interview-tool rename ./素材 --group-by interviewee --dry-run
+        """
     )
     
     rename_parser.add_argument(
@@ -131,13 +159,13 @@ def _add_rename_parser(subparsers):
     rename_parser.add_argument(
         '--topic',
         default=None,
-        help='强制设置主题（默认：采访）'
+        help='强制设置主题（默认从文件名提取或"采访"）'
     )
     
     rename_parser.add_argument(
         '--group-by',
         default=None,
-        choices=['interviewee', 'date', 'extension'],
+        choices=['interviewee', 'date', 'extension', 'topic'],
         help='分组方式，每组单独编号'
     )
     
@@ -153,6 +181,33 @@ def _add_rename_parser(subparsers):
         help='自动确认，不提示'
     )
     
+    rename_parser.add_argument(
+        '--export-plan',
+        default=None,
+        metavar='JSON_FILE',
+        help='导出重命名清单到 JSON 文件（不执行），供团队确认'
+    )
+    
+    rename_parser.add_argument(
+        '--from-plan',
+        default=None,
+        metavar='JSON_FILE',
+        help='从导出的 JSON 清单中加载计划并执行'
+    )
+    
+    rename_parser.add_argument(
+        '--export-report',
+        default=None,
+        metavar='JSON_FILE',
+        help='导出执行结果报告到 JSON 文件'
+    )
+    
+    rename_parser.add_argument(
+        '--no-skip-on-conflict',
+        action='store_true',
+        help='遇到命名冲突时报错而非跳过'
+    )
+    
     rename_parser.set_defaults(func=cmd_rename)
 
 
@@ -161,7 +216,22 @@ def _add_merge_parser(subparsers):
     merge_parser = subparsers.add_parser(
         'merge',
         help='合并零散的文字稿',
-        description='将多个零散的文字稿片段合并为一个完整文件，支持片段排序和摘要提取'
+        description='将多个零散的文字稿片段合并为完整文件，支持片段排序、采访提要、按主题分组',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+示例:
+  # 按受访者分组合并，生成采访提要
+  interview-tool merge ./素材 --group-by interviewee
+  
+  # 按主题分组合并
+  interview-tool merge ./素材 --group-by topic
+  
+  # 按日期分组合并
+  interview-tool merge ./素材 --group-by date
+  
+  # 手动合并所有文字稿
+  interview-tool merge ./素材 --output 合并稿.txt
+        """
     )
     
     merge_parser.add_argument(
@@ -198,8 +268,8 @@ def _add_merge_parser(subparsers):
     merge_parser.add_argument(
         '--group-by',
         default=None,
-        choices=['interviewee', 'date'],
-        help='按受访者或日期分组合并'
+        choices=['interviewee', 'date', 'topic'],
+        help='按受访者/日期/主题分组合并'
     )
     
     merge_parser.add_argument(
@@ -207,6 +277,12 @@ def _add_merge_parser(subparsers):
         type=int,
         default=200,
         help='摘要长度（字符数），设为0禁用摘要'
+    )
+    
+    merge_parser.add_argument(
+        '--no-brief',
+        action='store_true',
+        help='不在合并稿开头添加采访提要'
     )
     
     merge_parser.set_defaults(func=cmd_merge)

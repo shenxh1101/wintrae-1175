@@ -1,0 +1,115 @@
+{
+  "generated_at": "2026-06-15T05:01:06.411752",
+  "summary": {
+    "总计": 20,
+    "成功": 20,
+    "失败": 0,
+    "跳过": 0,
+    "未变化": 0
+  },
+  "成功列表": [
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\2024-02-20_王五专访.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈录音.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈文字稿.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_06.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\周八_2024-03-15_采访.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_08.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_文档_采访_09.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_10.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_11.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_12.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_13.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_14.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_15.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\空文件.wav",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_16.wav",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\空文字稿.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_赵六_采访_18.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
+      "dry_run": false
+    },
+    {
+      "old_path": "D:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
+      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
+      "dry_run": false
+    }
+  ],
+  "失败列表": [],
+  "跳过列表": [],
+  "未变化列表": []
+}

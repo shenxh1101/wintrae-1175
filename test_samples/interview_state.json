@@ -1,0 +1,294 @@
+{
+  "version": "1.0",
+  "created_at": "2026-06-15T05:01:06.378723",
+  "updated_at": "2026-06-15T05:01:15.254841",
+  "rename": {
+    "completed": true,
+    "completed_at": "2026-06-15T05:01:06.410689",
+    "renamed_files": [
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
+        "interviewee": "陈七",
+        "date": "2023-12-01T00:00:00",
+        "renamed_at": "2026-06-15T05:01:06.399840"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
+        "interviewee": "陈七",
+        "date": "2023-12-01T00:00:00",
+        "renamed_at": "2026-06-15T05:01:06.400345"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\2024-02-20_王五专访.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
+        "interviewee": "王五",
+        "date": "2024-02-20T00:00:00",
+        "renamed_at": "2026-06-15T05:01:06.400345"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈录音.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
+        "interviewee": "张三",
+        "date": "2024-01-15T00:00:00",
+        "renamed_at": "2026-06-15T05:01:06.401359"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈文字稿.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt",
+        "interviewee": "张三",
+        "date": "2024-01-15T00:00:00",
+        "renamed_at": "2026-06-15T05:01:06.402357"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_06.wav",
+        "interviewee": null,
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.402357"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\周八_2024-03-15_采访.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
+        "interviewee": "周八",
+        "date": "2024-03-15T00:00:00",
+        "renamed_at": "2026-06-15T05:01:06.402860"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_08.wav",
+        "interviewee": null,
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.403373"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_文档_采访_09.txt",
+        "interviewee": "文档",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.403373"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_10.txt",
+        "interviewee": "李四",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.404890"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_11.wav",
+        "interviewee": "李四",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.404890"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_12.txt",
+        "interviewee": "李四",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.405890"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_13.wav",
+        "interviewee": "李四",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.406392"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_14.txt",
+        "interviewee": "李四",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.406392"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_15.wav",
+        "interviewee": "李四",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.407391"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\空文件.wav",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_16.wav",
+        "interviewee": null,
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.407391"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\空文字稿.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
+        "interviewee": null,
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.408633"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_赵六_采访_18.txt",
+        "interviewee": "赵六",
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.408633"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
+        "interviewee": null,
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.408633"
+      },
+      {
+        "old_path": "D:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
+        "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
+        "interviewee": null,
+        "date": null,
+        "renamed_at": "2026-06-15T05:01:06.410169"
+      }
+    ],
+    "skipped_files": [],
+    "failed_files": []
+  },
+  "merge": {
+    "completed": true,
+    "completed_at": "2026-06-15T05:01:15.254841",
+    "merged_groups": [
+      {
+        "group_name": "受访者",
+        "output_path": "test_samples\\受访者_合并稿.txt",
+        "source_files": [
+          "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
+          "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
+          "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt"
+        ],
+        "interviewee": "受访者",
+        "date": null,
+        "topic": "未知",
+        "merged_at": "2026-06-15T05:01:15.253342"
+      },
+      {
+        "group_name": "李四",
+        "output_path": "test_samples\\李四_合并稿.txt",
+        "source_files": [
+          "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_10.txt",
+          "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_12.txt",
+          "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_14.txt"
+        ],
+        "interviewee": "李四",
+        "date": null,
+        "topic": "采访",
+        "merged_at": "2026-06-15T05:01:15.254841"
+      }
+    ],
+    "merged_files": [
+      "test_samples\\受访者_合并稿.txt",
+      "test_samples\\李四_合并稿.txt"
+    ],
+    "skipped_groups": [
+      {
+        "group_name": "张三",
+        "reason": "文件数少于2，跳过合并",
+        "skipped_at": "2026-06-15T05:01:15.250062"
+      },
+      {
+        "group_name": "文档",
+        "reason": "文件数少于2，跳过合并",
+        "skipped_at": "2026-06-15T05:01:15.250062"
+      },
+      {
+        "group_name": "赵六",
+        "reason": "文件数少于2，跳过合并",
+        "skipped_at": "2026-06-15T05:01:15.254841"
+      },
+      {
+        "group_name": "陈七",
+        "reason": "文件数少于2，跳过合并",
+        "skipped_at": "2026-06-15T05:01:15.254841"
+      }
+    ]
+  },
+  "interviews": {
+    "20231201_陈七_采访": {
+      "interviewee": "陈七",
+      "date": "2023-12-01T00:00:00",
+      "renamed": true,
+      "merged": false,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
+        "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav"
+      ]
+    },
+    "20240220_王五_采访": {
+      "interviewee": "王五",
+      "date": "2024-02-20T00:00:00",
+      "renamed": true,
+      "merged": false,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav"
+      ]
+    },
+    "20240115_张三_采访": {
+      "interviewee": "张三",
+      "date": "2024-01-15T00:00:00",
+      "renamed": true,
+      "merged": false,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
+        "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt"
+      ]
+    },
+    "20240315_周八_采访": {
+      "interviewee": "周八",
+      "date": "2024-03-15T00:00:00",
+      "renamed": true,
+      "merged": false,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav"
+      ]
+    },
+    "unknown_date_文档_采访": {
+      "interviewee": "文档",
+      "date": null,
+      "renamed": true,
+      "merged": false,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_文档_采访_09.txt"
+      ]
+    },
+    "unknown_date_李四_采访": {
+      "interviewee": "李四",
+      "date": null,
+      "renamed": true,
+      "merged": true,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_10.txt",
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_11.wav",
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_12.txt",
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_13.wav",
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_14.txt",
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_15.wav"
+      ],
+      "merged_output": "test_samples\\李四_合并稿.txt",
+      "topic": "采访"
+    },
+    "unknown_date_赵六_采访": {
+      "interviewee": "赵六",
+      "date": null,
+      "renamed": true,
+      "merged": false,
+      "files": [
+        "D:\\TraeProjects\\1175\\test_samples\\未知日期_赵六_采访_18.txt"
+      ]
+    },
+    "unknown_date_受访者_采访": {
+      "interviewee": "受访者",
+      "date": null,
+      "topic": "未知",
+      "renamed": false,
+      "merged": true,
+      "files": [],
+      "merged_output": "test_samples\\受访者_合并稿.txt"
+    }
+  }
+}

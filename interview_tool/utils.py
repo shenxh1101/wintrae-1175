@@ -123,7 +123,8 @@ def extract_interviewee_from_filename(filename):
         date_str = date_match.group()
     
     patterns = [
-        r'([\u4e00-\u9fa5]{2,4})[_\-\s]*(?:采访|访谈|专访|录音)',
+        r'([\u4e00-\u9fa5]{2,3})[_\-\s]*(?:采访|访谈|专访|录音)',
+        r'([\u4e00-\u9fa5]{2,3})(?:采访|访谈|专访|录音)',
         r'(?:采访|访谈|专访)[_\-\s]*([\u4e00-\u9fa5]{2,4})',
         r'^([\u4e00-\u9fa5]{2,4})[_\-\s]',
         r'[_\-\s]([\u4e00-\u9fa5]{2,4})$',
@@ -144,3 +145,117 @@ def extract_interviewee_from_filename(filename):
             return word
     
     return None
+
+
+def normalize_basename_for_pairing(filename):
+    """
+    规范化文件名用于配对匹配
+    
+    剔除日期、录音、文字稿、专访、访谈、片段等后缀，
+    提取核心标识用于同一场采访的音频和文字稿配对
+    
+    示例:
+        '20240115_张三访谈录音.wav' -> '张三'
+        '20240115_张三访谈文字稿.txt' -> '张三'
+        '李四_片段1.wav' -> '李四'
+        '李四_片段2.txt' -> '李四'
+    """
+    import re
+    stem = Path(filename).stem
+    
+    # 移除日期
+    stem = re.sub(r'\d{4}[-_]?\d{2}[-_]?\d{2}', '', stem)
+    
+    # 移除常见的采访相关后缀和前缀
+    suffixes_to_remove = [
+        r'_采访_\d+$', r'_访谈_\d+$', r'_专访_\d+$',
+        r'访谈录音.*$', r'访谈文字.*$', r'访谈记录.*$',
+        r'专访录音.*$', r'专访文字.*$',
+        r'采访录音.*$', r'采访文字.*$', r'采访记录.*$',
+        r'录音$', r'文字稿$', r'记录$', r'访谈$', r'专访$', r'采访$',
+        r'片段\d+', r'part\d+', r'segment\d+', r'第[一二三四五六七八九十\d]+段',
+        r'副本\d*', r'_copy\d*',
+        r'^\d+[_\-]', r'[_\-]\d+$',
+    ]
+    
+    for pattern in suffixes_to_remove:
+        stem = re.sub(pattern, '', stem, flags=re.IGNORECASE)
+    
+    # 清理分隔符
+    stem = re.sub(r'[_\-\s]+', '_', stem)
+    stem = stem.strip('_')
+    
+    # 如果还有日期或受访者信息，优先提取受访者
+    interviewee = extract_interviewee_from_filename(filename)
+    if interviewee:
+        return interviewee
+    
+    # 尝试提取中文字符
+    chinese_chars = re.findall(r'[\u4e00-\u9fa5]{2,}', stem)
+    if chinese_chars:
+        return ''.join(chinese_chars)
+    
+    return stem
+
+
+def extract_topic_from_filename(filename):
+    """
+    从文件名中提取采访主题
+    
+    查找"XX主题"、"XX专题"或其他主题标识
+    """
+    import re
+    stem = Path(filename).stem
+    
+    # 先移除日期和标准命名格式中的编号
+    stem_clean = re.sub(r'\d{4}[-_]?\d{2}[-_]?\d{2}', '', stem)
+    # 移除标准命名格式: {日期}_{受访者}_采访_{编号}
+    stem_clean = re.sub(r'_采访_\d+$', '', stem_clean)
+    stem_clean = re.sub(r'_访谈_\d+$', '', stem_clean)
+    stem_clean = re.sub(r'_专访_\d+$', '', stem_clean)
+    # 移除"未知日期"标识
+    stem_clean = re.sub(r'^未知日期[_-]?', '', stem_clean)
+    
+    # 尝试匹配主题相关模式
+    patterns = [
+        r'[_\-\s]*([\u4e00-\u9fa5]{2,10}?)(?:主题|专题|项目|话题)[_\-\s]*',
+        r'关于[_\-\s]*([\u4e00-\u9fa5]{2,20})[_\-\s]*',
+        r'「([^」]+)」',
+        r'【([^】]+)】',
+    ]
+    
+    for pattern in patterns:
+        match = re.search(pattern, stem_clean)
+        if match:
+            topic = match.group(1).strip()
+            if topic and topic not in EXCLUDED_INTERVIEWEE_WORDS:
+                return topic
+    
+    # 如果有受访者信息，尝试提取受访者之外的内容
+    interviewee = extract_interviewee_from_filename(filename)
+    if interviewee:
+        without_interviewee = stem_clean.replace(interviewee, '')
+        without_interviewee = re.sub(r'[_\-\s]+', '', without_interviewee)
+        
+        # 移除其他常见词
+        for word in EXCLUDED_INTERVIEWEE_WORDS:
+            without_interviewee = without_interviewee.replace(word, '')
+        
+        if len(without_interviewee) >= 2:
+            return without_interviewee
+    
+    return "采访"
+
+
+def get_pairing_key(file_info):
+    """
+    生成文件配对的唯一键
+    
+    基于日期、受访者、主题的组合，用于判断是否属于同一场采访
+    """
+    date_str = file_info.date.strftime('%Y%m%d') if file_info.date else 'unknown_date'
+    interviewee = file_info.interviewee or 'unknown_interviewee'
+    topic = extract_topic_from_filename(file_info.filename)
+    
+    return f"{date_str}_{interviewee}_{topic}"
+

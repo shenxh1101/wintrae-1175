@@ -2,12 +2,18 @@
 
 import os
 import sys
+import json
 from pathlib import Path
+from datetime import datetime
 
 from .scanner import scan_directory
 from .naming import NamingRule, Renamer
-from .merger import merge_text_files, merge_by_group, sort_segments, extract_summary
+from .merger import (
+    merge_text_files, merge_by_group, sort_segments, 
+    extract_summary, extract_interview_brief, read_text_file
+)
 from .reporter import ReportGenerator
+from .state import StateManager
 from .utils import format_duration, format_file_size, is_text_file
 
 
@@ -26,7 +32,7 @@ def cmd_scan(args):
         print("模式: 递归扫描")
     else:
         print("模式: 仅当前目录")
-    print("-" * 50)
+    print("-" * 60)
     
     try:
         result = scan_directory(directory, recursive=recursive, compute_hash=compute_hash)
@@ -113,7 +119,7 @@ def cmd_rename(args):
     """
     执行 rename 命令
     
-    按规则批量重命名文件，支持日期补全、受访者标签、分组序号
+    按规则批量重命名文件，支持日期补全、受访者标签、分组序号、清单导出
     """
     directory = args.directory
     recursive = not args.no_recursive
@@ -123,71 +129,102 @@ def cmd_rename(args):
     interviewee = args.interviewee
     topic = args.topic
     group_by = args.group_by
+    export_plan = args.export_plan
+    from_plan = args.from_plan
+    export_report = args.export_report
+    skip_on_conflict = not args.no_skip_on_conflict
+    
+    state_manager = StateManager(directory)
     
     print(f"准备重命名目录: {directory}")
     if dry_run:
         print("模式: 试运行（不会实际修改文件）")
+    elif from_plan:
+        print(f"模式: 从清单执行: {from_plan}")
     else:
         print("模式: 执行重命名")
-    print("-" * 50)
+    print("-" * 60)
     
-    try:
-        result = scan_directory(directory, recursive=recursive, compute_hash=False)
-    except (FileNotFoundError, NotADirectoryError) as e:
-        print(f"错误: {e}")
-        return 1
+    renamer = Renamer(state_manager=state_manager)
     
-    print(f"扫描到 {result.total_files} 个文件")
-    
-    rule = NamingRule(pattern=pattern) if pattern else NamingRule()
-    
-    if date_str:
-        rule.set_date(date_str)
-        print(f"强制日期: {date_str}")
-    
-    if interviewee:
-        rule.set_interviewee(interviewee)
-        print(f"强制受访者: {interviewee}")
-    
-    if topic:
-        rule.set_topic(topic)
-        print(f"强制主题: {topic}")
-    
-    if group_by:
-        print(f"分组方式: {group_by}")
+    if from_plan:
+        if not os.path.exists(from_plan):
+            print(f"错误: 清单文件不存在: {from_plan}")
+            return 1
+        try:
+            plan = renamer.load_plan(from_plan)
+            print(f"已加载清单，共 {len(plan)} 个文件")
+        except Exception as e:
+            print(f"错误: 加载清单失败: {e}")
+            return 1
+    else:
+        try:
+            result = scan_directory(directory, recursive=recursive, compute_hash=False)
+        except (FileNotFoundError, NotADirectoryError) as e:
+            print(f"错误: {e}")
+            return 1
+        
+        print(f"扫描到 {result.total_files} 个文件")
+        
+        rule = NamingRule(pattern=pattern) if pattern else NamingRule()
+        
+        if date_str:
+            rule.set_date(date_str)
+            print(f"强制日期: {date_str}")
+        
+        if interviewee:
+            rule.set_interviewee(interviewee)
+            print(f"强制受访者: {interviewee}")
+        
+        if topic:
+            rule.set_topic(topic)
+            print(f"强制主题: {topic}")
+        
+        if group_by:
+            print(f"分组方式: {group_by}")
+        
+        renamer.rule = rule
+        
+        files_to_rename = result.audio_files + result.text_files + result.subtitle_files
+        plan = renamer.plan_rename(files_to_rename, group_by=group_by)
     
     print()
-    
-    renamer = Renamer(rule)
-    
-    files_to_rename = result.audio_files + result.text_files + result.subtitle_files
-    plan = renamer.plan_rename(files_to_rename, group_by=group_by)
     
     if renamer.conflicts:
         print(f"警告: 发现 {len(renamer.conflicts)} 个命名冲突")
-        for conflict in renamer.conflicts:
-            print(f"  - {conflict}")
+        for i, conflict in enumerate(renamer.conflicts, 1):
+            if conflict['type'] == 'exists_conflict':
+                print(f"  {i}. 目标文件已存在: {os.path.basename(conflict['old_path'])} -> {os.path.basename(conflict['target_path'])}")
+            else:
+                files_str = ", ".join(os.path.basename(f) for f in conflict['files'])
+                print(f"  {i}. 计划内冲突: {files_str} -> {os.path.basename(conflict['target_path'])}")
+        if skip_on_conflict:
+            print("  这些文件将被跳过处理")
         print()
     
-    print("【重命名计划】")
-    changed_count = 0
-    for i, (old_path, new_name, new_path) in enumerate(plan, 1):
-        old_name = os.path.basename(old_path)
-        if old_name == new_name:
-            status = " [不变]"
-        else:
-            status = ""
-            changed_count += 1
-        print(f"  {i:>3}. {old_name} -> {new_name}{status}")
+    if export_plan:
+        print(f"导出重命名清单到: {export_plan}")
+        plan_data = renamer.export_plan(export_plan)
+        print(f"清单包含: {plan_data['summary']['to_rename']} 个待重命名文件")
+        
+        preview_path = os.path.splitext(export_plan)[0] + "_预览.txt"
+        with open(preview_path, 'w', encoding='utf-8') as f:
+            f.write(renamer.format_plan_for_preview())
+        print(f"预览文件已保存到: {preview_path}")
+        print()
+        print("清单已导出，请团队确认后使用 --from-plan 参数执行。")
+        return 0
     
-    print()
-    print(f"共 {len(plan)} 个文件，其中 {changed_count} 个需要重命名")
+    print(renamer.format_plan_for_preview())
+    
+    changed_count = sum(1 for p in plan if p['old_path'] != p['new_path'])
+    print(f"\n共 {len(plan)} 个文件，其中 {changed_count} 个需要重命名")
     
     if changed_count == 0:
         print("没有需要重命名的文件")
         return 0
     
-    if not dry_run and not args.yes:
+    if not dry_run and not args.yes and not from_plan:
         print()
         response = input("确认执行重命名？(y/N): ")
         if response.lower() != 'y':
@@ -196,22 +233,49 @@ def cmd_rename(args):
     
     print()
     print("执行中...")
-    results = renamer.execute(dry_run=dry_run)
+    results = renamer.execute(dry_run=dry_run, skip_on_conflict=skip_on_conflict)
     
-    success_count = sum(1 for _, _, success, _ in results if success)
-    fail_count = sum(1 for _, _, success, _ in results if not success)
+    success_count = len(results['success'])
+    fail_count = len(results['failed'])
+    skip_count = len(results['skipped'])
+    unchanged_count = len(results['unchanged'])
     
     print()
-    print("【执行结果】")
-    print(f"  成功: {success_count} 个")
-    print(f"  失败: {fail_count} 个")
+    print("=" * 60)
+    print("【执行结果汇总】")
+    print("=" * 60)
+    print(f"  总计: {len(plan)} 个文件")
+    print(f"  ✓ 成功: {success_count} 个")
+    print(f"  ⊘ 跳过: {skip_count} 个")
+    print(f"  ✗ 失败: {fail_count} 个")
+    print(f"  ➖ 未变化: {unchanged_count} 个")
+    
+    if skip_count > 0:
+        print()
+        print("【跳过文件列表】")
+        print("-" * 60)
+        for i, item in enumerate(results['skipped'], 1):
+            reason = item.get('reason', '未知原因')
+            conflict_with = item.get('conflict_with')
+            conflict_str = f" (冲突: {os.path.basename(conflict_with)})" if conflict_with else ""
+            print(f"  {i:>3}. {os.path.basename(item['old_path'])}")
+            print(f"       原因: {reason}{conflict_str}")
     
     if fail_count > 0:
         print()
-        print("【失败详情】")
-        for old_path, new_path, success, error in results:
-            if not success:
-                print(f"  - {os.path.basename(old_path)}: {error}")
+        print("【失败文件列表】")
+        print("-" * 60)
+        for i, item in enumerate(results['failed'], 1):
+            print(f"  {i:>3}. {os.path.basename(item['old_path'])} -> {os.path.basename(item['new_path'])}")
+            print(f"       错误: {item.get('error', '未知错误')}")
+    
+    if export_report:
+        print()
+        print(f"导出执行报告到: {export_report}")
+        renamer.export_execution_report(export_report)
+    
+    print()
+    print(f"状态文件: {state_manager.get_state_file_path()}")
     
     return 0 if fail_count == 0 else 1
 
@@ -220,7 +284,7 @@ def cmd_merge(args):
     """
     执行 merge 命令
     
-    合并零散的文字稿，支持片段排序、摘要提取
+    合并零散的文字稿，支持片段排序、采访提要、按主题分组
     """
     directory = args.directory
     output = args.output
@@ -229,9 +293,13 @@ def cmd_merge(args):
     no_filename = args.no_filename
     group_by = args.group_by
     summary_length = args.summary_length
+    add_brief = not args.no_brief
+    
+    state_manager = StateManager(directory)
     
     print(f"准备合并文字稿，目录: {directory}")
-    print("-" * 50)
+    print(f"采访提要: {'启用' if add_brief else '禁用'}")
+    print("-" * 60)
     
     try:
         result = scan_directory(directory, recursive=recursive, compute_hash=False)
@@ -262,17 +330,32 @@ def cmd_merge(args):
             output,
             group_by=group_by,
             add_separator=not no_separator,
-            add_filename=not no_filename
+            add_filename=not no_filename,
+            add_brief=add_brief,
+            state_manager=state_manager
         )
         
         print()
+        print("=" * 60)
         print("【合并结果】")
+        print("=" * 60)
         if results:
-            for group_name, output_path, file_count in results:
-                print(f"  - {group_name}: 合并了 {file_count} 个文件 -> {os.path.basename(output_path)}")
+            for group_name, output_path, file_count, interviewee, date, topic in results:
+                date_str = date.strftime('%Y-%m-%d') if date else '未知日期'
+                print(f"\n✓ {group_name}")
+                print(f"    受访者: {interviewee or '未知'} | 日期: {date_str} | 主题: {topic}")
+                print(f"    合并 {file_count} 个片段 -> {os.path.basename(output_path)}")
                 
-                if summary_length > 0:
-                    from .merger import read_text_file
+                if add_brief:
+                    content = read_text_file(output_path)
+                    end_idx = content.find("╚")
+                    if end_idx > 0:
+                        brief_end = content.find("\n\n", end_idx)
+                        if brief_end > 0:
+                            brief = content[:brief_end]
+                            print(f"    采访提要已生成 ✓")
+                
+                if summary_length > 0 and not add_brief:
                     content = read_text_file(output_path)
                     summary = extract_summary(content, summary_length)
                     print(f"    摘要: {summary}")
@@ -294,20 +377,49 @@ def cmd_merge(args):
         print()
         print(f"输出文件: {output}")
         
+        sample_file = sorted_files[0]
+        sample_name = os.path.basename(sample_file)
+        from .utils import extract_interviewee_from_filename, parse_date_from_filename, extract_topic_from_filename
+        interviewee = extract_interviewee_from_filename(sample_name)
+        date = parse_date_from_filename(sample_name)
+        topic = extract_topic_from_filename(sample_name)
+        
         merged_text = merge_text_files(
             sorted_files,
             output_path=output,
             add_separator=not no_separator,
-            add_filename=not no_filename
+            add_filename=not no_filename,
+            add_brief=add_brief,
+            interviewee=interviewee,
+            date=date,
+            topic=topic
         )
         
-        print(f"合并完成，共 {len(sorted_files)} 个文件")
+        state_manager.add_merged_group(
+            "manual", output, sorted_files,
+            interviewee=interviewee, date=date, topic=topic
+        )
         
-        if summary_length > 0:
+        print(f"\n合并完成，共 {len(sorted_files)} 个文件")
+        
+        if add_brief:
+            brief = extract_interview_brief(
+                merged_text,
+                source_files=sorted_files,
+                interviewee=interviewee,
+                date=date,
+                topic=topic
+            )
+            print()
+            print(brief)
+        elif summary_length > 0:
             summary = extract_summary(merged_text, summary_length)
             print()
             print("【内容摘要】")
             print(f"  {summary}")
+    
+    print()
+    print(f"状态文件: {state_manager.get_state_file_path()}")
     
     return 0
 
@@ -323,8 +435,11 @@ def cmd_report(args):
     format_type = args.format
     recursive = not args.no_recursive
     
+    state_manager = StateManager(directory)
+    
     print(f"生成报告，目录: {directory}")
-    print("-" * 50)
+    print(f"状态文件: {state_manager.get_state_file_path()}")
+    print("-" * 60)
     
     try:
         result = scan_directory(directory, recursive=recursive, compute_hash=True)
@@ -332,7 +447,7 @@ def cmd_report(args):
         print(f"错误: {e}")
         return 1
     
-    reporter = ReportGenerator(result)
+    reporter = ReportGenerator(result, state_manager=state_manager)
     
     report_content = reporter.generate_full_report(
         output_path=output,
