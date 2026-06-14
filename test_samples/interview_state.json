@@ -1,456 +1,267 @@
 {
   "version": "1.0",
-  "created_at": "2026-06-15T05:30:11.525104",
-  "updated_at": "2026-06-15T05:30:22.972997",
+  "created_at": "2026-06-15T06:22:12.414128",
+  "updated_at": "2026-06-15T06:47:12.575609",
   "rename": {
-    "completed": true,
-    "completed_at": "2026-06-15T05:30:11.557665",
-    "renamed_files": [
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
-        "interviewee": "陈七",
-        "date": "2023-12-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.535641"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
-        "interviewee": "陈七",
-        "date": "2023-12-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.537149"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\2024-02-20_王五专访.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
-        "interviewee": "王五",
-        "date": "2024-02-20T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.537149"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈录音.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
-        "interviewee": "张三",
-        "date": "2024-01-15T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.537149"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈文字稿.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt",
-        "interviewee": "张三",
-        "date": "2024-01-15T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.538173"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240410_孙九_采访_06.wav",
-        "interviewee": "孙九",
-        "date": "2024-04-10T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.539169"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\周八_2024-03-15_采访.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
-        "interviewee": "周八",
-        "date": "2024-03-15T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.539674"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240520_钱十_采访_08.wav",
-        "interviewee": "钱十",
-        "date": "2024-05-20T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.540678"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_09.txt",
-        "interviewee": null,
-        "date": null,
-        "renamed_at": "2026-06-15T05:30:11.541196"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_10.txt",
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.541751"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_11.wav",
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.542770"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_12.txt",
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.543768"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_13.wav",
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.545840"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt",
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.546830"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_15.wav",
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.548356"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\空文件.wav",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_16.wav",
-        "interviewee": null,
-        "date": null,
-        "renamed_at": "2026-06-15T05:30:11.549864"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\空文字稿.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
-        "interviewee": null,
-        "date": null,
-        "renamed_at": "2026-06-15T05:30:11.551914"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240701_赵六_采访_18.txt",
-        "interviewee": "赵六",
-        "date": "2024-07-01T00:00:00",
-        "renamed_at": "2026-06-15T05:30:11.553483"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
-        "interviewee": null,
-        "date": null,
-        "renamed_at": "2026-06-15T05:30:11.555100"
-      },
-      {
-        "old_path": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
-        "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
-        "interviewee": null,
-        "date": null,
-        "renamed_at": "2026-06-15T05:30:11.556147"
-      }
-    ],
+    "completed": false,
+    "completed_at": null,
+    "renamed_files": [],
     "skipped_files": [],
     "failed_files": []
   },
   "merge": {
     "completed": true,
-    "completed_at": "2026-06-15T05:30:22.972997",
+    "completed_at": "2026-06-15T06:25:17.399425",
     "merged_groups": [
       {
-        "group_name": "李四",
-        "output_path": "test_samples\\李四_合并稿.txt",
-        "source_files": [
-          "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_10.txt",
-          "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_12.txt",
-          "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt"
-        ],
-        "interviewee": "李四",
-        "date": "2024-06-01T00:00:00",
-        "topic": "采访",
-        "merged_at": "2026-06-15T05:30:11.726536"
-      },
-      {
-        "group_name": "李四",
-        "output_path": "test_samples\\李四_合并稿.txt",
+        "group_name": "创业分享",
+        "output_path": "test_samples\\创业分享_合并稿.txt",
         "source_files": [
           "D:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_10.txt",
           "D:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_12.txt",
-          "D:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt",
-          "D:\\TraeProjects\\1175\\test_samples\\李四_合并稿.txt"
+          "D:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt"
         ],
         "interviewee": "李四",
         "date": "2024-06-01T00:00:00",
-        "topic": "采访",
-        "merged_at": "2026-06-15T05:30:22.969400"
+        "topic": "创业分享",
+        "merged_at": "2026-06-15T06:25:17.396845"
       }
     ],
     "merged_files": [
-      "test_samples\\李四_合并稿.txt",
-      "test_samples\\李四_合并稿.txt"
+      "test_samples\\创业分享_合并稿.txt"
     ],
     "skipped_groups": [
       {
-        "group_name": "张三",
+        "group_name": "AI产品发布会",
         "reason": "文件数少于2，跳过合并",
-        "skipped_at": "2026-06-15T05:30:11.722307"
+        "skipped_at": "2026-06-15T06:25:17.394307"
       },
       {
-        "group_name": "赵六",
+        "group_name": "采访",
+        "reason": "主题为默认采访，跳过合并（请先补录主题）",
+        "skipped_at": "2026-06-15T06:25:17.398401"
+      },
+      {
+        "group_name": "行业洞察",
         "reason": "文件数少于2，跳过合并",
-        "skipped_at": "2026-06-15T05:30:11.728070"
-      },
-      {
-        "group_name": "未知受访者",
-        "reason": "受访者未确认，跳过合并",
-        "skipped_at": "2026-06-15T05:30:11.728070"
-      },
-      {
-        "group_name": "陈七",
-        "reason": "文件数少于2，跳过合并",
-        "skipped_at": "2026-06-15T05:30:11.729577"
-      },
-      {
-        "group_name": "张三",
-        "reason": "文件数少于2，跳过合并",
-        "skipped_at": "2026-06-15T05:30:22.963953"
-      },
-      {
-        "group_name": "赵六",
-        "reason": "文件数少于2，跳过合并",
-        "skipped_at": "2026-06-15T05:30:22.971002"
-      },
-      {
-        "group_name": "未知受访者",
-        "reason": "受访者未确认，跳过合并",
-        "skipped_at": "2026-06-15T05:30:22.971998"
-      },
-      {
-        "group_name": "陈七",
-        "reason": "文件数少于2，跳过合并",
-        "skipped_at": "2026-06-15T05:30:22.972495"
+        "skipped_at": "2026-06-15T06:25:17.399425"
       }
     ]
   },
   "interviews": {
-    "20231201_陈七_采访": {
-      "interviewee": "陈七",
-      "date": "2023-12-01T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
-        "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav"
-      ]
-    },
-    "20240220_王五_采访": {
-      "interviewee": "王五",
-      "date": "2024-02-20T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav"
-      ]
-    },
-    "20240115_张三_采访": {
-      "interviewee": "张三",
-      "date": "2024-01-15T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
-        "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt"
-      ]
-    },
-    "20240410_孙九_采访": {
-      "interviewee": "孙九",
-      "date": "2024-04-10T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240410_孙九_采访_06.wav"
-      ]
-    },
-    "20240315_周八_采访": {
-      "interviewee": "周八",
-      "date": "2024-03-15T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav"
-      ]
-    },
-    "20240520_钱十_采访": {
-      "interviewee": "钱十",
-      "date": "2024-05-20T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240520_钱十_采访_08.wav"
-      ]
-    },
     "20240601_李四_采访": {
       "interviewee": "李四",
       "date": "2024-06-01T00:00:00",
-      "renamed": true,
+      "topic": "创业分享",
+      "renamed": false,
       "merged": true,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_10.txt",
-        "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_11.wav",
-        "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_12.txt",
-        "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_13.wav",
-        "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt",
-        "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_15.wav"
-      ],
-      "merged_output": "test_samples\\李四_合并稿.txt",
-      "topic": "采访"
-    },
-    "20240701_赵六_采访": {
-      "interviewee": "赵六",
-      "date": "2024-07-01T00:00:00",
-      "renamed": true,
-      "merged": false,
-      "files": [
-        "d:\\TraeProjects\\1175\\test_samples\\20240701_赵六_采访_18.txt"
-      ]
+      "files": [],
+      "merged_output": "test_samples\\创业分享_合并稿.txt"
     }
   },
   "daily_log": {
     "2026-06-15": {
-      "renamed_files": [
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
-          "interviewee": "陈七",
-          "timestamp": "2026-06-15T05:30:11.535641"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
-          "interviewee": "陈七",
-          "timestamp": "2026-06-15T05:30:11.537149"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\2024-02-20_王五专访.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
-          "interviewee": "王五",
-          "timestamp": "2026-06-15T05:30:11.537149"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈录音.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
-          "interviewee": "张三",
-          "timestamp": "2026-06-15T05:30:11.538173"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈文字稿.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt",
-          "interviewee": "张三",
-          "timestamp": "2026-06-15T05:30:11.538173"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240410_孙九_采访_06.wav",
-          "interviewee": "孙九",
-          "timestamp": "2026-06-15T05:30:11.539674"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\周八_2024-03-15_采访.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
-          "interviewee": "周八",
-          "timestamp": "2026-06-15T05:30:11.539674"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240520_钱十_采访_08.wav",
-          "interviewee": "钱十",
-          "timestamp": "2026-06-15T05:30:11.540678"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_09.txt",
-          "interviewee": null,
-          "timestamp": "2026-06-15T05:30:11.541751"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_10.txt",
-          "interviewee": "李四",
-          "timestamp": "2026-06-15T05:30:11.541751"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_11.wav",
-          "interviewee": "李四",
-          "timestamp": "2026-06-15T05:30:11.542770"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_12.txt",
-          "interviewee": "李四",
-          "timestamp": "2026-06-15T05:30:11.544795"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_13.wav",
-          "interviewee": "李四",
-          "timestamp": "2026-06-15T05:30:11.545840"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt",
-          "interviewee": "李四",
-          "timestamp": "2026-06-15T05:30:11.547333"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_15.wav",
-          "interviewee": "李四",
-          "timestamp": "2026-06-15T05:30:11.549358"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\空文件.wav",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_16.wav",
-          "interviewee": null,
-          "timestamp": "2026-06-15T05:30:11.550866"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\空文字稿.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
-          "interviewee": null,
-          "timestamp": "2026-06-15T05:30:11.551914"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240701_赵六_采访_18.txt",
-          "interviewee": "赵六",
-          "timestamp": "2026-06-15T05:30:11.554086"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
-          "interviewee": null,
-          "timestamp": "2026-06-15T05:30:11.555100"
-        },
-        {
-          "old_path": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
-          "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
-          "interviewee": null,
-          "timestamp": "2026-06-15T05:30:11.557155"
-        }
-      ],
+      "renamed_files": [],
       "merged_groups": [
         {
-          "group_name": "李四",
-          "output_path": "test_samples\\李四_合并稿.txt",
+          "group_name": "创业分享",
+          "output_path": "test_samples\\创业分享_合并稿.txt",
           "file_count": 3,
-          "timestamp": "2026-06-15T05:30:11.727049"
-        },
-        {
-          "group_name": "李四",
-          "output_path": "test_samples\\李四_合并稿.txt",
-          "file_count": 4,
-          "timestamp": "2026-06-15T05:30:22.969922"
+          "timestamp": "2026-06-15T06:25:17.397879"
         }
       ],
-      "confirmed_files": []
+      "confirmed_files": [
+        {
+          "filename": "20240115_张三_采访_04.wav",
+          "field": "topic",
+          "value": "AI产品发布会",
+          "timestamp": "2026-06-15T06:22:12.515243"
+        },
+        {
+          "filename": "20240115_张三_采访_05.txt",
+          "field": "topic",
+          "value": "AI产品发布会",
+          "timestamp": "2026-06-15T06:22:12.515747"
+        },
+        {
+          "filename": "20240601_李四_采访_10.txt",
+          "field": "topic",
+          "value": "创业分享",
+          "timestamp": "2026-06-15T06:22:12.515747"
+        },
+        {
+          "filename": "20240601_李四_采访_11.wav",
+          "field": "topic",
+          "value": "创业分享",
+          "timestamp": "2026-06-15T06:22:12.516250"
+        },
+        {
+          "filename": "20240601_李四_采访_12.txt",
+          "field": "topic",
+          "value": "创业分享",
+          "timestamp": "2026-06-15T06:22:12.516250"
+        },
+        {
+          "filename": "20240601_李四_采访_13.wav",
+          "field": "topic",
+          "value": "创业分享",
+          "timestamp": "2026-06-15T06:22:12.516250"
+        },
+        {
+          "filename": "20240601_李四_采访_14.txt",
+          "field": "topic",
+          "value": "创业分享",
+          "timestamp": "2026-06-15T06:22:12.516250"
+        },
+        {
+          "filename": "20240601_李四_采访_15.wav",
+          "field": "topic",
+          "value": "创业分享",
+          "timestamp": "2026-06-15T06:22:12.516250"
+        },
+        {
+          "filename": "未知日期_未知受访者_采访_09.txt",
+          "field": "interviewee",
+          "value": "吴十一",
+          "timestamp": "2026-06-15T06:22:12.517763"
+        },
+        {
+          "filename": "未知日期_未知受访者_采访_09.txt",
+          "field": "date",
+          "value": "2024-08-01",
+          "timestamp": "2026-06-15T06:22:12.517763"
+        },
+        {
+          "filename": "未知日期_未知受访者_采访_09.txt",
+          "field": "topic",
+          "value": "行业洞察",
+          "timestamp": "2026-06-15T06:22:12.518371"
+        }
+      ]
+    }
+  },
+  "interview_snapshots": {
+    "2026-06-15": {
+      "20240115_张三_AI产品发布会": {
+        "interviewee": "张三",
+        "date": "2024-01-15T00:00:00",
+        "topic": "AI产品发布会",
+        "has_audio": true,
+        "has_text": true,
+        "is_complete": true,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": false,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240220_王五_采访": {
+        "interviewee": "王五",
+        "date": "2024-02-20T00:00:00",
+        "topic": "采访",
+        "has_audio": true,
+        "has_text": false,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240315_周八_采访": {
+        "interviewee": "周八",
+        "date": "2024-03-15T00:00:00",
+        "topic": "采访",
+        "has_audio": true,
+        "has_text": false,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240410_孙九_采访": {
+        "interviewee": "孙九",
+        "date": "2024-04-10T00:00:00",
+        "topic": "采访",
+        "has_audio": true,
+        "has_text": false,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240520_钱十_采访": {
+        "interviewee": "钱十",
+        "date": "2024-05-20T00:00:00",
+        "topic": "采访",
+        "has_audio": true,
+        "has_text": false,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240601_李四_创业分享": {
+        "interviewee": "李四",
+        "date": "2024-06-01T00:00:00",
+        "topic": "创业分享",
+        "has_audio": true,
+        "has_text": true,
+        "is_complete": true,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": false,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240701_赵六_采访": {
+        "interviewee": "赵六",
+        "date": "2024-07-01T00:00:00",
+        "topic": "采访",
+        "has_audio": false,
+        "has_text": true,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20240801_吴十一_行业洞察": {
+        "interviewee": "吴十一",
+        "date": "2024-08-01T00:00:00",
+        "topic": "行业洞察",
+        "has_audio": false,
+        "has_text": true,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": false,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "unknown_date_unknown_interviewee_采访": {
+        "interviewee": null,
+        "date": null,
+        "topic": "采访",
+        "has_audio": false,
+        "has_text": true,
+        "is_complete": false,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      },
+      "20231201_陈七_采访": {
+        "interviewee": "陈七",
+        "date": "2023-12-01T00:00:00",
+        "topic": "采访",
+        "has_audio": true,
+        "has_text": true,
+        "is_complete": true,
+        "renamed": false,
+        "merged": false,
+        "unconfirmed": true,
+        "snapshot_at": "2026-06-15T06:47:12.575609"
+      }
     }
   }
 }

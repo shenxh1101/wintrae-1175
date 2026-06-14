@@ -16,20 +16,45 @@ class ConfirmationManager:
 
     def generate(self, scan_result):
         entries = []
+        existing_confirmed = {}
+        if os.path.exists(self.confirm_file):
+            for e in self.load():
+                if e.get('status') == 'confirmed':
+                    existing_confirmed[e['filename']] = e
+
         for file_info in scan_result.files:
             if file_info.is_empty:
                 continue
             interviewee = file_info.interviewee
             date = file_info.date
             topic = extract_topic_from_filename(file_info.filename)
+
+            if file_info.filename in existing_confirmed:
+                entry = existing_confirmed[file_info.filename].copy()
+                entry['detected_interviewee'] = interviewee
+                entry['detected_date'] = date.isoformat() if date else None
+                entry['detected_topic'] = topic
+                entries.append(entry)
+                continue
+
             needs_confirm = (
                 interviewee is None
                 or interviewee == 'unknown'
                 or interviewee == '未知受访者'
                 or date is None
+                or topic == '采访'
             )
             if not needs_confirm:
                 continue
+
+            missing_reasons = []
+            if interviewee is None or interviewee == 'unknown' or interviewee == '未知受访者':
+                missing_reasons.append('interviewee')
+            if date is None:
+                missing_reasons.append('date')
+            if topic == '采访':
+                missing_reasons.append('topic')
+
             entries.append({
                 'filename': file_info.filename,
                 'filepath': file_info.filepath,
@@ -40,10 +65,11 @@ class ConfirmationManager:
                 'detected_topic': topic,
                 'confirmed_topic': None,
                 'status': 'pending',
+                'missing_fields': missing_reasons,
             })
         now = datetime.now().isoformat()
         data = {
-            'version': '1.0',
+            'version': '1.1',
             'generated_at': now,
             'updated_at': now,
             'entries': entries,
@@ -120,7 +146,7 @@ class ConfirmationManager:
                     elif isinstance(info['date'], datetime):
                         file_info.date = info['date']
                 if info.get('topic') is not None:
-                    file_info._confirmed_topic = info['topic']
+                    file_info.topic = info['topic']
         return scan_result
 
     def get_pending_count(self):

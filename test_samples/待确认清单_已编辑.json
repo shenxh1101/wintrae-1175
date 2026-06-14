@@ -1,7 +1,7 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "generated_at": "2026-06-15T06:17:26.776622",
-  "updated_at": "2026-06-15T06:22:12.514242",
+  "updated_at": "2026-06-15T06:20:00.000000",
   "entries": [
     {
       "filename": "20240115_张三_采访_04.wav",
@@ -13,9 +13,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "AI产品发布会",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240115_张三_采访_05.txt",
@@ -27,9 +25,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "AI产品发布会",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240601_李四_采访_10.txt",
@@ -41,9 +37,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "创业分享",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240601_李四_采访_11.wav",
@@ -55,9 +49,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "创业分享",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240601_李四_采访_12.txt",
@@ -69,9 +61,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "创业分享",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240601_李四_采访_13.wav",
@@ -83,9 +73,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "创业分享",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240601_李四_采访_14.txt",
@@ -97,9 +85,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "创业分享",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "20240601_李四_采访_15.wav",
@@ -111,9 +97,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "创业分享",
       "status": "confirmed",
-      "missing_fields": [
-        "topic"
-      ]
+      "missing_fields": ["topic"]
     },
     {
       "filename": "未知日期_未知受访者_采访_09.txt",
@@ -125,11 +109,7 @@
       "detected_topic": "采访",
       "confirmed_topic": "行业洞察",
       "status": "confirmed",
-      "missing_fields": [
-        "interviewee",
-        "date",
-        "topic"
-      ]
+      "missing_fields": ["interviewee", "date", "topic"]
     }
   ]
 }

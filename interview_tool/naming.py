@@ -159,7 +159,7 @@ class Renamer:
                 elif group_by == 'extension':
                     key = f.extension
                 elif group_by == 'topic':
-                    key = extract_topic_from_filename(f.filename)
+                    key = f.topic or extract_topic_from_filename(f.filename)
                 else:
                     key = 'default'
                 groups.setdefault(key, []).append(f)
@@ -168,7 +168,7 @@ class Renamer:
             for key, group_files in groups.items():
                 group_files.sort(key=lambda x: x.filename)
                 for idx, f in enumerate(group_files, 1):
-                    topic = extract_topic_from_filename(f.filename)
+                    topic = f.topic or extract_topic_from_filename(f.filename)
                     new_name = self.rule.generate_name(
                         f.filename,
                         index=idx,
@@ -195,7 +195,7 @@ class Renamer:
             file_list.sort(key=lambda x: x.filename)
             self.rename_plan = []
             for idx, f in enumerate(file_list, 1):
-                topic = extract_topic_from_filename(f.filename)
+                topic = f.topic or extract_topic_from_filename(f.filename)
                 new_name = self.rule.generate_name(
                     f.filename,
                     index=idx,

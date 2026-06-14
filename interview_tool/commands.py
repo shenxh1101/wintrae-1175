@@ -328,17 +328,25 @@ def cmd_merge(args):
 
     text_files = [f.filepath for f in result.text_files]
 
-    if not text_files:
-        print("未找到文字稿文件")
+    from .merger import _filter_out_merged_files
+    text_files_filtered = _filter_out_merged_files(text_files, state_manager)
+    filtered_count = len(text_files) - len(text_files_filtered)
+
+    if not text_files_filtered:
+        print("未找到可合并的文字稿文件")
+        if filtered_count > 0:
+            print(f"（已排除 {filtered_count} 个已生成的合并稿）")
         return 0
 
-    print(f"找到 {len(text_files)} 个文字稿文件")
+    print(f"找到 {len(text_files_filtered)} 个文字稿文件")
+    if filtered_count > 0:
+        print(f"（已排除 {filtered_count} 个已生成的合并稿）")
 
     if preview:
         if group_by:
-            preview_results = preview_merge(text_files, directory, group_by=group_by, state_manager=state_manager)
+            preview_results = preview_merge(text_files_filtered, directory, group_by=group_by, state_manager=state_manager, confirmation_manager=confirm_mgr)
         else:
-            preview_results = preview_merge(text_files, directory, state_manager=state_manager)
+            preview_results = preview_merge(text_files_filtered, directory, state_manager=state_manager, confirmation_manager=confirm_mgr)
         print(format_merge_preview(preview_results))
         return 0
 
@@ -353,7 +361,7 @@ def cmd_merge(args):
             os.makedirs(output, exist_ok=True)
 
         results = merge_by_group(
-            text_files,
+            text_files_filtered,
             output,
             group_by=group_by,
             add_separator=not no_separator,
@@ -463,6 +471,7 @@ def cmd_report(args):
     format_type = args.format
     recursive = not args.no_recursive
     daily = args.daily
+    weekly = args.weekly
     export_confirm = args.export_confirm
     import_confirm = args.import_confirm
 
@@ -492,11 +501,32 @@ def cmd_report(args):
         return 0
 
     if import_confirm:
+        old_entries = confirm_mgr.load()
+        old_confirmed = {e['filename']: e for e in old_entries if e.get('status') == 'confirmed'}
+
         entries = confirm_mgr.import_from_edited(import_confirm)
         confirmed_count = sum(1 for e in entries if e.get('status') == 'confirmed')
         pending_count = sum(1 for e in entries if e.get('status') == 'pending')
+
+        for e in entries:
+            if e.get('status') != 'confirmed':
+                continue
+            filename = e['filename']
+            old_entry = old_confirmed.get(filename)
+            for field in ['interviewee', 'date', 'topic']:
+                confirmed_val = e.get(f'confirmed_{field}')
+                old_val = old_entry.get(f'confirmed_{field}') if old_entry else None
+                if confirmed_val and confirmed_val != old_val:
+                    state_manager.log_daily_confirmation(filename, field, confirmed_val)
+
         print(f"已导入确认数据: {import_confirm}")
         print(f"已确认: {confirmed_count} 条 | 待确认: {pending_count} 条")
+
+        daily_log = state_manager.get_daily_log()
+        today_confirmed = len(daily_log.get('confirmed_files', []))
+        if today_confirmed > 0:
+            print(f"今日新增确认: {today_confirmed} 个字段（可在 report --daily 中查看明细）")
+
         return 0
 
     reporter = ReportGenerator(result, state_manager=state_manager)
@@ -505,7 +535,8 @@ def cmd_report(args):
     report_content = reporter.generate_full_report(
         output_path=output,
         format=format_type,
-        daily=daily
+        daily=daily,
+        weekly=weekly
     )
 
     print(report_content)

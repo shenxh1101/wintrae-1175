@@ -56,7 +56,8 @@ class StateManager:
                 'skipped_groups': [],
             },
             'interviews': {},
-            'daily_log': {}
+            'daily_log': {},
+            'interview_snapshots': {},
         }
     
     def _save(self):
@@ -359,4 +360,147 @@ class StateManager:
             'today_renamed': len(daily_log.get('renamed_files', [])),
             'today_merged': len(daily_log.get('merged_groups', [])),
             'today_confirmed': len(daily_log.get('confirmed_files', [])),
+        }
+
+    def _get_week_key(self, date_obj=None):
+        if date_obj is None:
+            date_obj = datetime.now()
+        year, week, _ = date_obj.isocalendar()
+        return f"{year}-W{week:02d}"
+
+    def _get_week_date_range(self, week_key=None):
+        if week_key is None:
+            week_key = self._get_week_key()
+        parts = week_key.split('-W')
+        year = int(parts[0])
+        week = int(parts[1])
+        try:
+            monday = datetime.fromisocalendar(year, week, 1)
+            sunday = datetime.fromisocalendar(year, week, 7)
+        except AttributeError:
+            jan4 = datetime(year, 1, 4)
+            jan4_weekday = jan4.weekday()
+            week1_monday = jan4 - __import__('datetime').timedelta(days=jan4_weekday)
+            monday = week1_monday + __import__('datetime').timedelta(weeks=week - 1)
+            sunday = monday + __import__('datetime').timedelta(days=6)
+        return monday, sunday
+
+    def take_interview_snapshot(self, interview_groups):
+        date_key = self._today_key()
+        snapshots = self._state.setdefault('interview_snapshots', {})
+        snapshot_data = {}
+        for key, info in interview_groups.items():
+            snapshot_data[key] = {
+                'interviewee': info.get('interviewee'),
+                'date': info.get('date'),
+                'topic': info.get('topic', '采访'),
+                'has_audio': info.get('has_audio', False),
+                'has_text': info.get('has_text', False),
+                'is_complete': info.get('is_complete', False),
+                'renamed': info.get('renamed', False),
+                'merged': info.get('merged', False),
+                'unconfirmed': info.get('unconfirmed', False),
+                'snapshot_at': datetime.now().isoformat(),
+            }
+        snapshots[date_key] = snapshot_data
+        self._save()
+        return snapshot_data
+
+    def get_weekly_report(self, week_key=None, confirmation_manager=None):
+        if week_key is None:
+            week_key = self._get_week_key()
+
+        monday, sunday = self._get_week_date_range(week_key)
+        date_format = '%Y-%m-%d'
+        monday_str = monday.strftime(date_format)
+        sunday_str = sunday.strftime(date_format)
+
+        daily_log = self._state.get('daily_log', {})
+        week_dates = []
+        current = monday
+        while current <= sunday:
+            week_dates.append(current.strftime(date_format))
+            current = current + __import__('datetime').timedelta(days=1)
+
+        weekly_renamed = []
+        weekly_merged = []
+        weekly_confirmed = []
+        for d in week_dates:
+            day_log = daily_log.get(d, {})
+            weekly_renamed.extend(day_log.get('renamed_files', []))
+            weekly_merged.extend(day_log.get('merged_groups', []))
+            weekly_confirmed.extend(day_log.get('confirmed_files', []))
+
+        snapshots = self._state.get('interview_snapshots', {})
+        week_snapshots = {d: snapshots.get(d, {}) for d in week_dates if d in snapshots}
+
+        newly_complete = []
+        stuck_groups = []
+        if week_snapshots:
+            first_day = min(week_snapshots.keys())
+            last_day = max(week_snapshots.keys())
+            first_snapshot = week_snapshots[first_day]
+            last_snapshot = week_snapshots[last_day]
+
+            for key, last_info in last_snapshot.items():
+                first_info = first_snapshot.get(key)
+                if last_info.get('is_complete'):
+                    if first_info and not first_info.get('is_complete'):
+                        newly_complete.append({
+                            'key': key,
+                            'interviewee': last_info.get('interviewee', '未知'),
+                            'date': last_info.get('date', '未知'),
+                            'topic': last_info.get('topic', '采访'),
+                            'completed_at': last_info.get('snapshot_at', ''),
+                        })
+
+            days_incomplete = {}
+            for d, snap in week_snapshots.items():
+                for key, info in snap.items():
+                    if not info.get('is_complete') or info.get('unconfirmed'):
+                        if key not in days_incomplete:
+                            days_incomplete[key] = {
+                                'info': info,
+                                'days': 0,
+                                'first_seen': d,
+                                'last_seen': d,
+                            }
+                        days_incomplete[key]['days'] += 1
+                        days_incomplete[key]['last_seen'] = d
+                        days_incomplete[key]['info'] = info
+
+            for key, data in days_incomplete.items():
+                if data['days'] >= 3:
+                    stuck_groups.append({
+                        'key': key,
+                        'interviewee': data['info'].get('interviewee', '未知'),
+                        'date': data['info'].get('date', '未知'),
+                        'topic': data['info'].get('topic', '采访'),
+                        'stuck_days': data['days'],
+                        'first_seen': data['first_seen'],
+                        'last_seen': data['last_seen'],
+                        'has_audio': data['info'].get('has_audio', False),
+                        'has_text': data['info'].get('has_text', False),
+                        'unconfirmed': data['info'].get('unconfirmed', False),
+                    })
+
+        unconfirmed_count = 0
+        if confirmation_manager:
+            unconfirmed_count = confirmation_manager.get_pending_count()
+
+        return {
+            'week_key': week_key,
+            'week_start': monday_str,
+            'week_end': sunday_str,
+            'renamed_count': len(weekly_renamed),
+            'renamed_files': weekly_renamed,
+            'merged_count': len(weekly_merged),
+            'merged_groups': weekly_merged,
+            'confirmed_count': len(weekly_confirmed),
+            'confirmed_files': weekly_confirmed,
+            'newly_complete': newly_complete,
+            'newly_complete_count': len(newly_complete),
+            'stuck_groups': stuck_groups,
+            'stuck_count': len(stuck_groups),
+            'unconfirmed_count': unconfirmed_count,
         }

@@ -256,7 +256,7 @@ def get_pairing_key(file_info):
     """
     date_str = file_info.date.strftime('%Y%m%d') if file_info.date else 'unknown_date'
     interviewee = file_info.interviewee or 'unknown_interviewee'
-    topic = extract_topic_from_filename(file_info.filename)
+    topic = file_info.topic if hasattr(file_info, 'topic') else extract_topic_from_filename(file_info.filename)
     
     return f"{date_str}_{interviewee}_{topic}"
 

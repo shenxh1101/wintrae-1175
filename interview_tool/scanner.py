@@ -7,13 +7,22 @@ from collections import defaultdict
 from .utils import (
     is_audio_file, is_text_file, is_subtitle_file, is_media_related,
     get_file_hash, get_file_size, is_empty_file,
-    parse_date_from_filename, extract_interviewee_from_filename
+    parse_date_from_filename, extract_interviewee_from_filename,
+    extract_topic_from_filename
 )
 from .audio import get_audio_duration
 
 TOOL_GENERATED_FILES = {
     'interview_state.json', '待确认清单.json', '待确认清单_可读版.txt',
 }
+
+MERGED_FILE_PATTERNS = ['_合并稿.txt', '_合并.txt']
+
+def _is_merged_output(filename):
+    for pattern in MERGED_FILE_PATTERNS:
+        if filename.endswith(pattern):
+            return True
+    return False
 
 class FileInfo:
     """文件信息类"""
@@ -36,6 +45,7 @@ class FileInfo:
         
         self.date = parse_date_from_filename(self.filename)
         self.interviewee = extract_interviewee_from_filename(self.filename)
+        self.topic = extract_topic_from_filename(self.filename)
     
     @property
     def hash(self):
@@ -114,6 +124,8 @@ def scan_directory(directory, recursive=True, compute_hash=True):
                 filepath = os.path.join(root, filename)
                 if filename in TOOL_GENERATED_FILES:
                     continue
+                if _is_merged_output(filename):
+                    continue
                 if is_media_related(filepath):
                     file_info = FileInfo(filepath)
                     result.files.append(file_info)
@@ -137,6 +149,8 @@ def scan_directory(directory, recursive=True, compute_hash=True):
         for item in os.listdir(directory):
             filepath = os.path.join(directory, item)
             if item in TOOL_GENERATED_FILES:
+                continue
+            if _is_merged_output(item):
                 continue
             if os.path.isfile(filepath) and is_media_related(filepath):
                 file_info = FileInfo(filepath)

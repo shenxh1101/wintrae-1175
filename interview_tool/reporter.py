@@ -83,11 +83,12 @@ class ReportGenerator:
             norm_base = normalize_basename_for_pairing(f.filename)
 
             if key not in groups:
+                topic = f.topic if hasattr(f, 'topic') else extract_topic_from_filename(f.filename)
                 groups[key] = InterviewGroup(
                     pairing_key=key,
                     interviewee=f.interviewee,
                     date=f.date,
-                    topic=extract_topic_from_filename(f.filename)
+                    topic=topic
                 )
 
             group = groups[key]
@@ -96,6 +97,8 @@ class ReportGenerator:
                 group.interviewee = f.interviewee
             if f.date and not group.date:
                 group.date = f.date
+            if hasattr(f, 'topic') and f.topic and f.topic != '采访' and (not group.topic or group.topic == '采访'):
+                group.topic = f.topic
 
             if f.is_audio:
                 group.audio_files.append(f)
@@ -246,6 +249,90 @@ class ReportGenerator:
             'unconfirmed_count': len(unconfirmed_list),
         }
 
+    def generate_weekly_report(self, scan_result=None, week_key=None):
+        result = scan_result or self.scan_result
+        if result is None:
+            raise ValueError("未提供扫描结果")
+
+        weekly_data = {
+            'week_key': '',
+            'week_start': '',
+            'week_end': '',
+            'renamed_count': 0,
+            'merged_count': 0,
+            'confirmed_count': 0,
+            'newly_complete': [],
+            'newly_complete_count': 0,
+            'stuck_groups': [],
+            'stuck_count': 0,
+            'unconfirmed_count': 0,
+            'missing_groups': [],
+            'missing_count': 0,
+        }
+
+        if self.state_manager:
+            weekly_data = self.state_manager.get_weekly_report(
+                week_key=week_key,
+                confirmation_manager=self.confirmation_manager
+            )
+
+        groups = self.get_interview_groups(result)
+        missing_groups = []
+        for key, group in groups.items():
+            if not group.is_complete:
+                missing_parts = []
+                if not group.has_text:
+                    missing_parts.append('文字稿')
+                if not group.has_audio:
+                    missing_parts.append('音频')
+                missing_groups.append({
+                    'group_name': self._format_group_name(group),
+                    'interviewee': group.interviewee or '未知',
+                    'date': group.date.strftime('%Y-%m-%d') if group.date else '未知',
+                    'topic': group.topic or '采访',
+                    'missing': '、'.join(missing_parts),
+                })
+
+        weekly_data['missing_groups'] = missing_groups
+        weekly_data['missing_count'] = len(missing_groups)
+
+        return weekly_data
+
+    def build_snapshot_data(self, scan_result=None):
+        result = scan_result or self.scan_result
+        if result is None:
+            raise ValueError("未提供扫描结果")
+
+        groups = self.get_interview_groups(result)
+        snapshot = {}
+        for key, group in groups.items():
+            state_info = {}
+            if self.state_manager:
+                interviews = self.state_manager._state.get('interviews', {})
+                state_info = interviews.get(key, {})
+
+            unconfirmed = False
+            if self.confirmation_manager:
+                for f in group.audio_files + group.text_files + group.subtitle_files:
+                    confirmed_info = self.confirmation_manager.get_confirmed_info(f.filename)
+                    if not confirmed_info:
+                        if f.interviewee is None or f.interviewee == '未知受访者' or f.date is None or f.topic == '采访':
+                            unconfirmed = True
+                            break
+
+            snapshot[key] = {
+                'interviewee': group.interviewee,
+                'date': group.date.isoformat() if group.date else None,
+                'topic': group.topic or '采访',
+                'has_audio': group.has_audio,
+                'has_text': group.has_text,
+                'is_complete': group.is_complete,
+                'renamed': state_info.get('renamed', False),
+                'merged': state_info.get('merged', False),
+                'unconfirmed': unconfirmed,
+            }
+        return snapshot
+
     def generate_unconfirmed_list(self, scan_result=None):
         result = scan_result or self.scan_result
         if result is None:
@@ -259,10 +346,11 @@ class ReportGenerator:
                 if entry.get('status') == 'pending':
                     unconfirmed.append({
                         'filename': entry['filename'],
-                        'filepath': entry['filepath'],
+                        'filepath': entry.get('filepath', ''),
                         'interviewee': entry.get('detected_interviewee'),
                         'date': entry.get('detected_date'),
                         'topic': entry.get('detected_topic'),
+                        'missing_fields': entry.get('missing_fields', []),
                     })
         else:
             for f in result.files:
@@ -270,15 +358,30 @@ class ReportGenerator:
                     continue
                 interviewee = f.interviewee
                 date = f.date
-                topic = extract_topic_from_filename(f.filename)
-                if interviewee is None or interviewee == '未知受访者' or date is None:
-                    unconfirmed.append({
-                        'filename': f.filename,
-                        'filepath': f.filepath,
-                        'interviewee': interviewee,
-                        'date': date.isoformat() if date else None,
-                        'topic': topic,
-                    })
+                topic = f.topic if hasattr(f, 'topic') else extract_topic_from_filename(f.filename)
+                needs_confirm = (
+                    interviewee is None
+                    or interviewee == '未知受访者'
+                    or date is None
+                    or topic == '采访'
+                )
+                if not needs_confirm:
+                    continue
+                missing_fields = []
+                if interviewee is None or interviewee == '未知受访者':
+                    missing_fields.append('interviewee')
+                if date is None:
+                    missing_fields.append('date')
+                if topic == '采访':
+                    missing_fields.append('topic')
+                unconfirmed.append({
+                    'filename': f.filename,
+                    'filepath': f.filepath,
+                    'interviewee': interviewee,
+                    'date': date.isoformat() if date else None,
+                    'topic': topic,
+                    'missing_fields': missing_fields,
+                })
 
         return unconfirmed
 
@@ -545,7 +648,7 @@ class ReportGenerator:
 
         return details
 
-    def generate_full_report(self, scan_result=None, output_path=None, format='text', daily=False):
+    def generate_full_report(self, scan_result=None, output_path=None, format='text', daily=False, weekly=False):
         result = scan_result or self.scan_result
         if result is None:
             raise ValueError("未提供扫描结果")
@@ -557,6 +660,10 @@ class ReportGenerator:
         group_details = self.generate_interview_groups_detail(result)
         dashboard = self.generate_dashboard(result)
         unconfirmed_list = self.generate_unconfirmed_list(result)
+
+        if self.state_manager:
+            snapshot_data = self.build_snapshot_data(result)
+            self.state_manager.take_interview_snapshot(snapshot_data)
 
         report_data = {
             '摘要': summary,
@@ -572,10 +679,14 @@ class ReportGenerator:
             daily_report = self.generate_daily_report(result)
             report_data['daily_report'] = daily_report
 
+        if weekly:
+            weekly_report = self.generate_weekly_report(result)
+            report_data['weekly_report'] = weekly_report
+
         if format == 'json':
             report_content = json.dumps(report_data, ensure_ascii=False, indent=2)
         else:
-            report_content = self._format_text_report(report_data, daily=daily)
+            report_content = self._format_text_report(report_data, daily=daily, weekly=weekly)
 
         if output_path:
             output_dir = os.path.dirname(output_path)
@@ -587,7 +698,7 @@ class ReportGenerator:
 
         return report_content
 
-    def _format_text_report(self, data, daily=False):
+    def _format_text_report(self, data, daily=False, weekly=False):
         lines = []
         lines.append("=" * 70)
         lines.append("采访素材整理报告")
@@ -772,6 +883,72 @@ class ReportGenerator:
                 lines.append(f"    - {filename} | 受访者: {interviewee} | 日期: {date}")
             if dr['unconfirmed_count'] > 10:
                 lines.append(f"    ... 还有 {dr['unconfirmed_count'] - 10} 件")
+            lines.append("")
+
+        if weekly and 'weekly_report' in data:
+            wr = data['weekly_report']
+            lines.append("【周报】")
+            lines.append(f"  周期: {wr.get('week_start', '')} ~ {wr.get('week_end', '')}")
+            lines.append(f"  周号: {wr.get('week_key', '')}")
+            lines.append("")
+
+            lines.append(f"  本周新处理: 重命名 {wr.get('renamed_count', 0)} 件 / 合并 {wr.get('merged_count', 0)} 组 / 确认 {wr.get('confirmed_count', 0)} 个字段")
+            lines.append("")
+
+            lines.append(f"  本周新确认补录 ({wr.get('confirmed_count', 0)} 个字段)")
+            for item in wr.get('confirmed_files', [])[:10]:
+                filename = item.get('filename', '')
+                field = item.get('field', '')
+                value = item.get('value', '')
+                field_cn = {'interviewee': '受访者', 'date': '日期', 'topic': '主题'}.get(field, field)
+                lines.append(f"    - {filename}: {field_cn} → {value}")
+            if wr.get('confirmed_count', 0) > 10:
+                lines.append(f"    ... 还有 {wr['confirmed_count'] - 10} 条")
+            lines.append("")
+
+            lines.append(f"  本周新变完整 ({wr.get('newly_complete_count', 0)} 组)")
+            if wr.get('newly_complete'):
+                for item in wr['newly_complete'][:10]:
+                    interviewee = item.get('interviewee', '未知')
+                    date = item.get('date', '未知')
+                    topic = item.get('topic', '采访')
+                    lines.append(f"    - {interviewee} | {date} | {topic}")
+                if len(wr['newly_complete']) > 10:
+                    lines.append(f"    ... 还有 {len(wr['newly_complete']) - 10} 组")
+            else:
+                lines.append("    (本周暂无新增完整分组)")
+            lines.append("")
+
+            lines.append(f"  反复卡壳分组 ({wr.get('stuck_count', 0)} 组)")
+            if wr.get('stuck_groups'):
+                for item in wr['stuck_groups'][:10]:
+                    interviewee = item.get('interviewee', '未知')
+                    stuck_days = item.get('stuck_days', 0)
+                    missing = []
+                    if not item.get('has_audio'):
+                        missing.append('音频')
+                    if not item.get('has_text'):
+                        missing.append('文字稿')
+                    if item.get('unconfirmed'):
+                        missing.append('待确认')
+                    missing_str = '、'.join(missing) if missing else '未知'
+                    lines.append(f"    - {interviewee}: 卡壳 {stuck_days} 天 (缺{missing_str})")
+                if len(wr['stuck_groups']) > 10:
+                    lines.append(f"    ... 还有 {len(wr['stuck_groups']) - 10} 组")
+            else:
+                lines.append("    (暂无反复卡壳的分组)")
+            lines.append("")
+
+            lines.append(f"  当前仍缺件分组 ({wr.get('missing_count', 0)} 组)")
+            for item in wr.get('missing_groups', [])[:10]:
+                group_name = item.get('group_name', '')
+                missing_desc = item.get('missing', '')
+                lines.append(f"    - {group_name}: 缺{missing_desc}")
+            if wr.get('missing_count', 0) > 10:
+                lines.append(f"    ... 还有 {wr['missing_count'] - 10} 组")
+            lines.append("")
+
+            lines.append(f"  当前待确认素材: {wr.get('unconfirmed_count', 0)} 件")
             lines.append("")
 
         lines.append("【问题清单】")

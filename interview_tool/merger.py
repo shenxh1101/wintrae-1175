@@ -243,23 +243,69 @@ def merge_text_files(filepaths, output_path=None, add_separator=True, add_filena
     return merged_text
 
 
-def _build_groups(filepaths, group_by):
-    if group_by == 'interviewee':
-        return group_files_by_interviewee(filepaths)
-    elif group_by == 'topic':
-        return group_files_by_topic(filepaths)
-    else:
-        groups = defaultdict(list)
-        for filepath in filepaths:
-            filename = os.path.basename(filepath)
-            date = parse_date_from_filename(filename)
-            date_key = date.strftime("%Y%m%d") if date else "未知日期"
-            groups[date_key].append(filepath)
-        return dict(groups)
+def _get_merged_file_paths(state_manager):
+    if state_manager is None:
+        return set()
+    merged = set()
+    for g in state_manager._state.get('merge', {}).get('merged_groups', []):
+        if g.get('output_path'):
+            merged.add(os.path.abspath(g['output_path']))
+    for f in state_manager._state.get('merge', {}).get('merged_files', []):
+        merged.add(os.path.abspath(f))
+    return merged
+
+
+def _filter_out_merged_files(filepaths, state_manager):
+    merged_paths = _get_merged_file_paths(state_manager)
+    return [f for f in filepaths if os.path.abspath(f) not in merged_paths]
+
+
+def _build_groups(filepaths, group_by, confirmation_manager=None):
+    groups = defaultdict(list)
+
+    for filepath in filepaths:
+        filename = os.path.basename(filepath)
+
+        interviewee = extract_interviewee_from_filename(filename)
+        date = parse_date_from_filename(filename)
+        topic = extract_topic_from_filename(filename)
+
+        if confirmation_manager:
+            confirmed_info = confirmation_manager.get_confirmed_info(filename)
+            if confirmed_info:
+                if confirmed_info.get('interviewee'):
+                    interviewee = confirmed_info['interviewee']
+                if confirmed_info.get('date'):
+                    if isinstance(confirmed_info['date'], str):
+                        try:
+                            date = datetime.fromisoformat(confirmed_info['date'])
+                        except ValueError:
+                            pass
+                    elif isinstance(confirmed_info['date'], datetime):
+                        date = confirmed_info['date']
+                if confirmed_info.get('topic'):
+                    topic = confirmed_info['topic']
+
+        if group_by == 'interviewee':
+            key = interviewee or '未知受访者'
+        elif group_by == 'topic':
+            key = topic or '未分类主题'
+        elif group_by == 'date':
+            key = date.strftime("%Y%m%d") if date else '未知日期'
+        else:
+            key = 'default'
+
+        groups[key].append(filepath)
+
+    return dict(groups)
 
 
 def _group_has_confirmed_interviewee(group_name, group_files, confirmation_manager):
     if confirmation_manager is None:
+        return True
+
+    detected = extract_interviewee_from_filename(os.path.basename(group_files[0]))
+    if detected and detected not in (None, 'unknown', '未知受访者'):
         return True
 
     for filepath in group_files:
@@ -268,19 +314,13 @@ def _group_has_confirmed_interviewee(group_name, group_files, confirmation_manag
         if confirmed_info and confirmed_info.get('interviewee'):
             return True
 
-    detected = extract_interviewee_from_filename(os.path.basename(group_files[0]))
-    if detected and detected != '未知受访者':
-        return True
-
     return False
 
 
-def preview_merge(filepaths, output_dir, group_by='interviewee', state_manager=None):
-    groups = _build_groups(filepaths, group_by)
+def preview_merge(filepaths, output_dir, group_by='interviewee', state_manager=None, confirmation_manager=None):
+    filepaths = _filter_out_merged_files(filepaths, state_manager)
 
-    confirmation_manager = None
-    if state_manager and hasattr(state_manager, 'directory'):
-        confirmation_manager = ConfirmationManager(state_manager.directory)
+    groups = _build_groups(filepaths, group_by, confirmation_manager)
 
     preview_results = []
 
@@ -291,10 +331,37 @@ def preview_merge(filepaths, output_dir, group_by='interviewee', state_manager=N
         date = parse_date_from_filename(sample_name)
         topic = extract_topic_from_filename(sample_name)
 
+        if confirmation_manager:
+            confirmed_info = confirmation_manager.get_confirmed_info(sample_name)
+            if confirmed_info:
+                if confirmed_info.get('interviewee'):
+                    interviewee = confirmed_info['interviewee']
+                if confirmed_info.get('date'):
+                    if isinstance(confirmed_info['date'], str):
+                        try:
+                            date = datetime.fromisoformat(confirmed_info['date'])
+                        except ValueError:
+                            pass
+                    elif isinstance(confirmed_info['date'], datetime):
+                        date = confirmed_info['date']
+                if confirmed_info.get('topic'):
+                    topic = confirmed_info['topic']
+
         safe_name = group_name.replace('/', '_').replace('\\', '_')
         output_path = os.path.join(output_dir, f"{safe_name}_合并稿.txt")
 
-        if confirmation_manager and not _group_has_confirmed_interviewee(group_name, group_files, confirmation_manager):
+        is_pending = False
+        if group_by == 'interviewee':
+            if not _group_has_confirmed_interviewee(group_name, group_files, confirmation_manager):
+                is_pending = True
+        elif group_by == 'topic':
+            if topic == '采访':
+                is_pending = True
+        elif group_by == 'date':
+            if date is None:
+                is_pending = True
+
+        if is_pending:
             preview_results.append({
                 'group_name': group_name,
                 'files': group_files,
@@ -354,7 +421,9 @@ def format_merge_preview(preview_results):
 
 
 def merge_by_group(filepaths, output_dir, group_by='interviewee', state_manager=None, confirmation_manager=None, **kwargs):
-    groups = _build_groups(filepaths, group_by)
+    filepaths = _filter_out_merged_files(filepaths, state_manager)
+
+    groups = _build_groups(filepaths, group_by, confirmation_manager)
 
     if state_manager:
         state_manager.mark_merge_started()
@@ -374,19 +443,36 @@ def merge_by_group(filepaths, output_dir, group_by='interviewee', state_manager=
         topic = extract_topic_from_filename(sample_name)
 
         if confirmation_manager:
-            if interviewee is None or interviewee == '未知受访者':
-                has_confirmed = False
-                for filepath in group_files:
-                    filename = os.path.basename(filepath)
-                    confirmed_info = confirmation_manager.get_confirmed_info(filename)
-                    if confirmed_info and confirmed_info.get('interviewee'):
-                        interviewee = confirmed_info['interviewee']
-                        has_confirmed = True
-                        break
-                if not has_confirmed:
-                    if state_manager:
-                        state_manager.add_skipped_group(group_name, "受访者未确认，跳过合并")
-                    continue
+            confirmed_info = confirmation_manager.get_confirmed_info(sample_name)
+            if confirmed_info:
+                if confirmed_info.get('interviewee'):
+                    interviewee = confirmed_info['interviewee']
+                if confirmed_info.get('date'):
+                    if isinstance(confirmed_info['date'], str):
+                        try:
+                            date = datetime.fromisoformat(confirmed_info['date'])
+                        except ValueError:
+                            pass
+                    elif isinstance(confirmed_info['date'], datetime):
+                        date = confirmed_info['date']
+                if confirmed_info.get('topic'):
+                    topic = confirmed_info['topic']
+
+        skip_reason = None
+        if group_by == 'interviewee':
+            if not _group_has_confirmed_interviewee(group_name, group_files, confirmation_manager):
+                skip_reason = "受访者未确认，跳过合并"
+        elif group_by == 'topic':
+            if topic == '采访':
+                skip_reason = "主题为默认采访，跳过合并（请先补录主题）"
+        elif group_by == 'date':
+            if date is None:
+                skip_reason = "日期未确认，跳过合并"
+
+        if skip_reason:
+            if state_manager:
+                state_manager.add_skipped_group(group_name, skip_reason)
+            continue
 
         safe_name = group_name.replace('/', '_').replace('\\', '_')
         output_path = os.path.join(output_dir, f"{safe_name}_合并稿.txt")

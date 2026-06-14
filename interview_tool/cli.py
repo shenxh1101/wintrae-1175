@@ -20,7 +20,7 @@ def create_parser():
   2. report --export-confirm 导出待确认清单，编辑补录后 --import-confirm 导入
   3. rename 先 --export-plan 导出清单确认，再 --from-plan 执行
   4. merge  按受访者/日期/主题分组合并，--preview 先预览再执行
-  5. report 查看整理进度和缺失项，--daily 生成日报
+  5. report 查看整理进度和缺失项，--daily 生成日报，--weekly 生成周报
 
 示例:
   interview-tool scan ./素材目录
@@ -46,6 +46,8 @@ def create_parser():
   interview-tool report ./素材 --import-confirm 待确认清单.json
   # 生成日报
   interview-tool report ./素材 --daily
+  # 生成周报
+  interview-tool report ./素材 --weekly
         """
     )
 
@@ -342,6 +344,12 @@ def _add_report_parser(subparsers):
         '--daily',
         action='store_true',
         help='生成日报模式，包含今日处理动态'
+    )
+
+    report_parser.add_argument(
+        '--weekly',
+        action='store_true',
+        help='生成周报模式，包含本周处理汇总、卡壳分组等'
     )
 
     report_parser.add_argument(
