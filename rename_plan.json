@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-06-15T05:00:53.927957",
+  "generated_at": "2026-06-15T05:30:11.413900",
   "rule": {
     "pattern": "{date}_{interviewee}_{topic}_{index}",
     "date_format": "%Y%m%d",
@@ -18,9 +18,9 @@
   "conflicts": [],
   "plan": [
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.txt",
       "new_name": "20231201_陈七_采访_01.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_01.txt",
       "interviewee": "陈七",
       "date": "2023-12-01T00:00:00",
       "topic": "采访",
@@ -31,9 +31,9 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七访谈.wav",
       "new_name": "20231201_陈七_采访_02.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\旧采访\\20231201_陈七_采访_02.wav",
       "interviewee": "陈七",
       "date": "2023-12-01T00:00:00",
       "topic": "采访",
@@ -44,9 +44,9 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\2024-02-20_王五专访.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\2024-02-20_王五专访.wav",
       "new_name": "20240220_王五_采访_03.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240220_王五_采访_03.wav",
       "interviewee": "王五",
       "date": "2024-02-20T00:00:00",
       "topic": "采访",
@@ -57,9 +57,9 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈录音.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈录音.wav",
       "new_name": "20240115_张三_采访_04.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_04.wav",
       "interviewee": "张三",
       "date": "2024-01-15T00:00:00",
       "topic": "采访",
@@ -70,9 +70,9 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈文字稿.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三访谈文字稿.txt",
       "new_name": "20240115_张三_采访_05.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240115_张三_采访_05.txt",
       "interviewee": "张三",
       "date": "2024-01-15T00:00:00",
       "topic": "采访",
@@ -83,11 +83,11 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
-      "new_name": "未知日期_未知受访者_采访_06.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_06.wav",
-      "interviewee": null,
-      "date": null,
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
+      "new_name": "20240410_孙九_采访_06.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240410_孙九_采访_06.wav",
+      "interviewee": "孙九",
+      "date": "2024-04-10T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 6,
@@ -96,9 +96,9 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\周八_2024-03-15_采访.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\周八_2024-03-15_采访.wav",
       "new_name": "20240315_周八_采访_07.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240315_周八_采访_07.wav",
       "interviewee": "周八",
       "date": "2024-03-15T00:00:00",
       "topic": "采访",
@@ -109,11 +109,11 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
-      "new_name": "未知日期_未知受访者_采访_08.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_08.wav",
-      "interviewee": null,
-      "date": null,
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
+      "new_name": "20240520_钱十_采访_08.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240520_钱十_采访_08.wav",
+      "interviewee": "钱十",
+      "date": "2024-05-20T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 8,
@@ -122,10 +122,10 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
-      "new_name": "未知日期_文档_采访_09.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_文档_采访_09.txt",
-      "interviewee": "文档",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
+      "new_name": "未知日期_未知受访者_采访_09.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_09.txt",
+      "interviewee": null,
       "date": null,
       "topic": "采访",
       "group": "default",
@@ -135,11 +135,11 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
-      "new_name": "未知日期_李四_采访_10.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_10.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
+      "new_name": "20240601_李四_采访_10.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_10.txt",
       "interviewee": "李四",
-      "date": null,
+      "date": "2024-06-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 10,
@@ -148,11 +148,11 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
-      "new_name": "未知日期_李四_采访_11.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_11.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
+      "new_name": "20240601_李四_采访_11.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_11.wav",
       "interviewee": "李四",
-      "date": null,
+      "date": "2024-06-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 11,
@@ -161,11 +161,11 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
-      "new_name": "未知日期_李四_采访_12.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_12.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
+      "new_name": "20240601_李四_采访_12.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_12.txt",
       "interviewee": "李四",
-      "date": null,
+      "date": "2024-06-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 12,
@@ -174,11 +174,11 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
-      "new_name": "未知日期_李四_采访_13.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_13.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
+      "new_name": "20240601_李四_采访_13.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_13.wav",
       "interviewee": "李四",
-      "date": null,
+      "date": "2024-06-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 13,
@@ -187,11 +187,11 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
-      "new_name": "未知日期_李四_采访_14.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_14.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
+      "new_name": "20240601_李四_采访_14.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_14.txt",
       "interviewee": "李四",
-      "date": null,
+      "date": "2024-06-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 14,
@@ -200,11 +200,11 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
-      "new_name": "未知日期_李四_采访_15.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_李四_采访_15.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
+      "new_name": "20240601_李四_采访_15.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240601_李四_采访_15.wav",
       "interviewee": "李四",
-      "date": null,
+      "date": "2024-06-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 15,
@@ -213,9 +213,9 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\空文件.wav",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\空文件.wav",
       "new_name": "未知日期_未知受访者_采访_16.wav",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_16.wav",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_16.wav",
       "interviewee": null,
       "date": null,
       "topic": "采访",
@@ -226,9 +226,9 @@
       "is_text": false
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\空文字稿.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\空文字稿.txt",
       "new_name": "未知日期_未知受访者_采访_17.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_17.txt",
       "interviewee": null,
       "date": null,
       "topic": "采访",
@@ -239,11 +239,11 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
-      "new_name": "未知日期_赵六_采访_18.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_赵六_采访_18.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
+      "new_name": "20240701_赵六_采访_18.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\20240701_赵六_采访_18.txt",
       "interviewee": "赵六",
-      "date": null,
+      "date": "2024-07-01T00:00:00",
       "topic": "采访",
       "group": "default",
       "index": 18,
@@ -252,9 +252,9 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
       "new_name": "未知日期_未知受访者_采访_19.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_19.txt",
       "interviewee": null,
       "date": null,
       "topic": "采访",
@@ -265,9 +265,9 @@
       "is_text": true
     },
     {
-      "old_path": "D:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
+      "old_path": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
       "new_name": "未知日期_未知受访者_采访_20.txt",
-      "new_path": "D:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
+      "new_path": "d:\\TraeProjects\\1175\\test_samples\\未知日期_未知受访者_采访_20.txt",
       "interviewee": null,
       "date": null,
       "topic": "采访",

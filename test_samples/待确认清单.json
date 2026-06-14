@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-06-15T05:30:11.023870",
+  "updated_at": "2026-06-15T05:30:11.243824",
+  "entries": [
+    {
+      "filename": "audio_002.wav",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\audio_002.wav",
+      "detected_interviewee": null,
+      "confirmed_interviewee": "孙九",
+      "detected_date": null,
+      "confirmed_date": "2024-04-10",
+      "detected_topic": "采访",
+      "confirmed_topic": "市场调研",
+      "status": "confirmed"
+    },
+    {
+      "filename": "录音_001.wav",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\录音_001.wav",
+      "detected_interviewee": null,
+      "confirmed_interviewee": "钱十",
+      "detected_date": null,
+      "confirmed_date": "2024-05-20",
+      "detected_topic": "采访",
+      "confirmed_topic": "行业分析",
+      "status": "confirmed"
+    },
+    {
+      "filename": "新建文本文档.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\新建文本文档.txt",
+      "detected_interviewee": null,
+      "confirmed_interviewee": null,
+      "detected_date": null,
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending"
+    },
+    {
+      "filename": "李四_片段1.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.txt",
+      "detected_interviewee": "李四",
+      "confirmed_interviewee": "李四",
+      "detected_date": null,
+      "confirmed_date": "2024-06-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "创业经历",
+      "status": "confirmed"
+    },
+    {
+      "filename": "李四_片段1.wav",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\李四_片段1.wav",
+      "detected_interviewee": "李四",
+      "confirmed_interviewee": "李四",
+      "detected_date": null,
+      "confirmed_date": "2024-06-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "创业经历",
+      "status": "confirmed"
+    },
+    {
+      "filename": "李四_片段2.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.txt",
+      "detected_interviewee": "李四",
+      "confirmed_interviewee": "李四",
+      "detected_date": null,
+      "confirmed_date": "2024-06-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "创业经历",
+      "status": "confirmed"
+    },
+    {
+      "filename": "李四_片段2.wav",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\李四_片段2.wav",
+      "detected_interviewee": "李四",
+      "confirmed_interviewee": "李四",
+      "detected_date": null,
+      "confirmed_date": "2024-06-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "创业经历",
+      "status": "confirmed"
+    },
+    {
+      "filename": "李四_片段3.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.txt",
+      "detected_interviewee": "李四",
+      "confirmed_interviewee": "李四",
+      "detected_date": null,
+      "confirmed_date": "2024-06-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "创业经历",
+      "status": "confirmed"
+    },
+    {
+      "filename": "李四_片段3.wav",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\李四_片段3.wav",
+      "detected_interviewee": "李四",
+      "confirmed_interviewee": "李四",
+      "detected_date": null,
+      "confirmed_date": "2024-06-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "创业经历",
+      "status": "confirmed"
+    },
+    {
+      "filename": "赵六访谈记录.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\赵六访谈记录.txt",
+      "detected_interviewee": "赵六",
+      "confirmed_interviewee": "赵六",
+      "detected_date": null,
+      "confirmed_date": "2024-07-01",
+      "detected_topic": "采访",
+      "confirmed_topic": "技术创新",
+      "status": "confirmed"
+    },
+    {
+      "filename": "重复文件_副本1.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本1.txt",
+      "detected_interviewee": null,
+      "confirmed_interviewee": null,
+      "detected_date": null,
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending"
+    },
+    {
+      "filename": "重复文件_副本2.txt",
+      "filepath": "d:\\TraeProjects\\1175\\test_samples\\重复文件_副本2.txt",
+      "detected_interviewee": null,
+      "confirmed_interviewee": null,
+      "detected_date": null,
+      "confirmed_date": null,
+      "detected_topic": "采访",
+      "confirmed_topic": null,
+      "status": "pending"
+    }
+  ]
+}

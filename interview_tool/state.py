@@ -55,7 +55,8 @@ class StateManager:
                 'merged_files': [],
                 'skipped_groups': [],
             },
-            'interviews': {}
+            'interviews': {},
+            'daily_log': {}
         }
     
     def _save(self):
@@ -106,6 +107,7 @@ class StateManager:
                 self._state['interviews'][key]['files'].append(new_path)
         
         self._save()
+        self.log_daily_rename(old_path, new_path, interviewee)
     
     def add_skipped_file(self, old_path, reason="", conflict_with=None):
         """记录一个跳过的文件"""
@@ -189,6 +191,7 @@ class StateManager:
         self._state['interviews'][key]['topic'] = topic or self._state['interviews'][key].get('topic')
         
         self._save()
+        self.log_daily_merge(group_name, output_path, len(source_files) if isinstance(source_files, list) else 0)
     
     def add_skipped_group(self, group_name, reason=""):
         """记录一个跳过的合并分组"""
@@ -265,3 +268,95 @@ class StateManager:
     def get_state_file_path(self):
         """获取状态文件路径"""
         return self.state_file
+
+    def _today_key(self):
+        return datetime.now().strftime('%Y-%m-%d')
+
+    def _ensure_daily_log(self, date_key=None):
+        key = date_key or self._today_key()
+        if key not in self._state['daily_log']:
+            self._state['daily_log'][key] = {
+                'renamed_files': [],
+                'merged_groups': [],
+                'confirmed_files': [],
+            }
+        return self._state['daily_log'][key]
+
+    def log_daily_rename(self, old_path, new_path, interviewee=None):
+        log = self._ensure_daily_log()
+        log['renamed_files'].append({
+            'old_path': old_path,
+            'new_path': new_path,
+            'interviewee': interviewee,
+            'timestamp': datetime.now().isoformat(),
+        })
+        self._save()
+
+    def log_daily_merge(self, group_name, output_path, file_count):
+        log = self._ensure_daily_log()
+        log['merged_groups'].append({
+            'group_name': group_name,
+            'output_path': output_path,
+            'file_count': file_count,
+            'timestamp': datetime.now().isoformat(),
+        })
+        self._save()
+
+    def log_daily_confirmation(self, filename, field, value):
+        log = self._ensure_daily_log()
+        log['confirmed_files'].append({
+            'filename': filename,
+            'field': field,
+            'value': value,
+            'timestamp': datetime.now().isoformat(),
+        })
+        self._save()
+
+    def get_daily_log(self, date_key=None):
+        key = date_key or self._today_key()
+        return self._state.get('daily_log', {}).get(key, {
+            'renamed_files': [],
+            'merged_groups': [],
+            'confirmed_files': [],
+        })
+
+    def get_dashboard(self, scan_result=None):
+        """
+        生成项目看板数据
+        
+        包含: 配对完成率、待确认素材数、已合并但缺件分组数、各步骤状态
+        """
+        rename_summary = self.get_rename_summary()
+        merge_summary = self.get_merge_summary()
+        interviews = self._state.get('interviews', {})
+        daily_log = self.get_daily_log()
+
+        total_groups = len(interviews) if interviews else 1
+        complete_groups = sum(
+            1 for v in interviews.values()
+            if v.get('has_audio') and v.get('has_text')
+        ) if interviews else 0
+        pairing_rate = (complete_groups / total_groups * 100) if total_groups > 0 else 0
+
+        merged_but_incomplete = []
+        for key, info in interviews.items():
+            if info.get('merged') and (not info.get('has_audio') or not info.get('has_text')):
+                merged_but_incomplete.append({
+                    'key': key,
+                    'interviewee': info.get('interviewee', '未知'),
+                    'missing': '缺文字稿' if not info.get('has_text') else '缺录音',
+                })
+
+        return {
+            'pairing_rate': f"{pairing_rate:.1f}%",
+            'complete_groups': complete_groups,
+            'total_groups': total_groups,
+            'unconfirmed_count': 0,
+            'merged_but_incomplete': merged_but_incomplete,
+            'merged_but_incomplete_count': len(merged_but_incomplete),
+            'rename_completed': rename_summary.get('已完成', False),
+            'merge_completed': merge_summary.get('已完成', False),
+            'today_renamed': len(daily_log.get('renamed_files', [])),
+            'today_merged': len(daily_log.get('merged_groups', [])),
+            'today_confirmed': len(daily_log.get('confirmed_files', [])),
+        }
